@@ -26,19 +26,16 @@
     text-shadow: none;
 }
 
-.navBarLogo-container {
-    height: 100%;
-    /* Logo container takes full height of the navbar */
-    display: flex;
-    align-items: center;
-    /* Centers the logo vertically */
-    padding: 0;
-    /* Remove padding to avoid any extra space inside the container */
-}
 
 .navBarLogo-container img {
-    max-height: 4rem;
-    /* Adjust the size as needed */
-    /* width: auto; */
-    /* Maintain aspect ratio */
+    max-width: 100%;
+    height: auto;
+}
+
+
+
+.navBarLogo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
