@@ -1,0 +1,55 @@
+<% layout("layouts/boilierplate")%>
+    <link rel="stylesheet" href="/stylesheets/allBank.css">
+
+    <h1>Admin View of All accounts</h1>
+
+    <input type="text" id="searchBar" placeholder="Search by username" oninput="filterAccounts()">
+
+    <% for (let account of accounts){ %>
+        <div class=" card" data-username="<%= account.holder.username %>">
+            <div class="card-header">
+                <a href="/accountViews/<%= account._id %>">
+                    Account Details of user: <%= account.holder.username %>
+                </a>
+            </div>
+            <div class="card-body">
+                <h3>
+                    <%= account.accountType %>
+                </h3>
+                <h5>
+                    <% const totalInDollars=(account.totalInCents / 100).toFixed(2); %>
+                        $<%= totalInDollars %>
+                </h5>
+            </div>
+
+            <% if(account.isFrozen) { %>
+                <form action="/accountViews/<%= account._id %>/Unfreeze" method="post">
+                    <button type="submit" class="btn btn-primary">Unfreeze</button>
+                </form>
+                <% } else{%>
+                    <form action="/accountViews/<%= account._id %>/Freeze" method="post">
+                        <button type="submit" class="btn btn-primary">Freeze</button>
+                    </form>
+
+                    <% } %>
+        </div>
+
+        <% }%>
+
+
+
+            <script>
+                function filterAccounts() {
+                    const searchValue = document.getElementById('searchBar').value.toLowerCase();
+                    const accounts = document.querySelectorAll('.card');
+
+                    accounts.forEach(account => {
+                        const username = account.getAttribute('data-username').toLowerCase();
+                        if (username.includes(searchValue)) {
+                            account.style.display = 'block';
+                        } else {
+                            account.style.display = 'none';
+                        }
+                    });
+                }
+            </script>

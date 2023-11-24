@@ -1,0 +1,173 @@
+<% layout("layouts/boilierplate") %>
+    <link rel="stylesheet" href="/stylesheets/showStyle.css">
+    <link rel="stylesheet" href="/stylesheets/allBank.css">
+
+    <% if(request.approved===null) { %>
+        <% if(!request.creditCardInfo && !request.loanInfo) { %>
+
+            <div class="container mt-4">
+                <div class="card">
+                    <div class="card-header">
+                        Request Details
+                    </div>
+                    <!-- Carousel for Images -->
+                    <div id="requestCarousel" class="carousel slide">
+                        <div class="carousel-inner">
+                            <% request.images.forEach((img, i)=> { %>
+                                <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
+                                    <div class="carousel-container">
+                                        <img src="<%= img.url %>" class="d-block w-100 carousel-image" alt="">
+                                        <div class="border-container"></div>
+                                    </div>
+                                </div>
+                                <% }) %>
+                        </div>
+
+                        <% if(request.images.length> 1) { %>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#requestCarousel"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+
+                            <button class="carousel-control-next" type="button" data-bs-target="#requestCarousel"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                            <% } %>
+                    </div>
+
+                    <% const totalInDollars=(request.amountInCents / 100).toFixed(2); %>
+                        <% const accountTotalInDollars=(request.accountFrom.id.totalInCents / 100).toFixed(2); %>
+
+
+
+
+                            <form action=" /accountViews/<%=request.accountFrom.id._id %>/requests/<%=
+                                    request._id %>/approve" method="post" style="display: inline;">
+                                <button type="submit" class="btn btn-primary">Approve</button>
+                            </form>
+                            <form
+                                action="/accountViews/<%= request.accountFrom.id._id %>/requests/<%= request._id %>/deny"
+                                method="post" style="display: inline;">
+                                <button type="submit" class="btn btn-danger">Deny</button>
+                            </form>
+
+                            <!-- Request Details -->
+                            <div class="card-body">
+                                <h5 class="card-title">Account Type: <%= request.accountFrom.accountType %>
+                                </h5>
+                                <p>
+                                    <a href="/accountViews/userDetails/<%= request.accountFrom.id.holder._id %>">
+                                        Account Holder: <%= request.accountFrom.id.holder.username %>
+                                    </a>
+                                </p>
+                                <p>Request: $<%= totalInDollars %>
+                                </p>
+                                <p>Account ID: <%= request.accountFrom.id._id %>
+                                </p>
+                                <p>Total in Account: $<%= accountTotalInDollars %>
+                                </p>
+                                <p>Request ID: <%= request._id %>
+                                </p>
+                                <p>Transaction history:</p>
+                                <% for(let transaction of request.accountFrom.id.transactions) { %>
+                                    <p>
+                                        Date: <%= transaction.date %><br>
+                                            Amount: <%= (transaction.amountInCents / 100).toFixed(2) %><br>
+                                                Type: <%= transaction.type %>
+                                    </p>
+                                    <% } %>
+                            </div>
+                </div>
+            </div>
+            <% } else if(request.creditCardInfo) { %>
+                <!-- Credit Card Request Details -->
+                <div class="container mt-4">
+                    <div class="card">
+                        <div class="card-header">
+                            Request Details for Card Approval
+                        </div>
+                        <div class="card-body" id="requestCard">
+                            <% const accountTotalInDollars=(request.accountFrom.id.totalInCents / 100).toFixed(2); %>
+                                <!-- Approval and Denial Buttons -->
+                                <form
+                                    action="/accountViews/<%= request.accountFrom.id._id %>/requests/<%= request._id %>/cardApproved"
+                                    method="post" style="display: inline;">
+                                    <button type="submit" class="btn btn-primary">Approve</button>
+                                </form>
+                                <form
+                                    action="/accountViews/<%= request.accountFrom.id._id %>/requests/<%= request._id %>/deny"
+                                    method="post" style="display: inline;">
+                                    <button type="submit" class="btn btn-danger">Deny</button>
+                                </form>
+
+                                <!-- Credit Card Request Details -->
+
+                                <p>
+                                    <a href="/accountViews/userDetails/<%= request.accountFrom.id.holder._id %>">
+                                        Account Holder: <%= request.accountFrom.id.holder.username %>
+                                    </a>
+                                </p>
+                                <p>Credit Card Requested: <%= request.creditCardInfo.creditCardType %>
+                                </p>
+                                <p>Employment Status: <%= request.creditCardInfo.employmentStatus %>
+                                </p>
+                                <p>Gross Income: $<%= request.creditCardInfo.grossIncome.toLocaleString() %>
+                                </p>
+                                <p>Request ID: <%= request._id %>
+                                </p>
+                                <p>Account ID: <%= request.accountFrom.id._id %>
+                                </p>
+                        </div>
+                    </div>
+                </div>
+                <% } else if(request.loanInfo) { %>
+                    <!-- Loan Request Details -->
+                    <div class="container mt-4">
+                        <div class="card">
+                            <div class="card-header">
+                                Request Details for Loan Approval
+                            </div>
+                            <div class="card-body" id="requestCard">
+                                <% const accountTotalInDollars=(request.accountFrom.id.totalInCents / 100).toFixed(2);
+                                    %>
+                                    <!-- Approval and Denial Buttons -->
+                                    <form
+                                        action="/accountViews/<%= request.accountFrom.id._id %>/requests/<%= request._id %>/loanApproved"
+                                        method="post" style="display: inline;">
+                                        <button type="submit" class="btn btn-primary">Approve</button>
+                                    </form>
+                                    <form
+                                        action="/accountViews/<%= request.accountFrom.id._id %>/requests/<%= request._id %>/deny"
+                                        method="post" style="display: inline;">
+                                        <button type="submit" class="btn btn-danger">Deny</button>
+                                    </form>
+
+                                    <!-- Loan Request Details -->
+
+                                    <p>
+                                        <a href="/accountViews/userDetails/<%= request.accountFrom.id.holder._id %>">
+                                            Account Holder: <%= request.accountFrom.id.holder.username %>
+                                        </a>
+                                    </p>
+                                    <p>Loan Type Requested: <%= request.loanInfo.loanType %>
+                                    </p>
+                                    <p>Loan Amount Requested: <%= (request.amountInCents / 100).toFixed(2) %>
+                                    </p>
+                                    <p>Loan Term: <%= request.loanInfo.loanTerm %>
+                                    </p>
+                                    <% const minimumInDollars=(request.loanInfo.monthlyMinimumInCents / 100).toFixed(2);
+                                        %>
+                                        <p>Minimum monthly offered: $<%= minimumInDollars %>
+                                        </p>
+                                        <p>Request ID: <%= request._id %>
+                                        </p>
+                                        <p>Account ID: <%= request.accountFrom.id._id %>
+                                        </p>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+                        <% } %>

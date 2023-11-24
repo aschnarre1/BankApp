@@ -1,0 +1,42 @@
+<% layout("layouts/boilierplate") %>
+    <link rel="stylesheet" href="/stylesheets/allBank.css">
+
+    <h1>My Accounts</h1>
+
+    <% let canDelete=true; %>
+        <% accounts.forEach(account=> { %>
+
+            <% if(currentUser && account.holder.equals(currentUser._id)) { %>
+                <div class="card">
+                    <div class="card-header">
+                        <a href="/accountViews/<%= account._id %>">
+                            Account Details
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h3>
+                            <%= account.accountType %>
+                        </h3>
+                        <h5>
+                            <% const totalInDollars=(account.totalInCents / 100).toFixed(2); %>
+                                $<%= totalInDollars %>
+                        </h5>
+                    </div>
+                </div>
+                <% if(account.totalInCents> 0){ %>
+                    <% canDelete=false; %>
+                        <% } %>
+                            <% } %>
+
+                                <% }); %>
+
+
+                                    <% if(canDelete) { %>
+                                        <div>
+                                            <p><b>Do you want to delete your account?</b></p>
+                                        </div>
+                                        <form action="/users/<%= currentUser._id %>?_method=DELETE" method="POST"
+                                            class="d-inline-block">
+                                            <button class="btn btn-danger">DELETE ACCOUNT</button>
+                                        </form>
+                                        <% } %>

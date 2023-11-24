@@ -1,0 +1,86 @@
+body {
+    background: linear-gradient(to right, #007bff, #000);
+    /* Blue to black gradient */
+    color: white;
+    /* White text color */
+    font-family: 'Arial', sans-serif;
+    /* Default font */
+}
+
+
+
+.container {
+    justify-content: space-around;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.card-info {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 30%;
+    text-align: center;
+}
+
+.card-info h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.contact-us-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    color: #ffffff;
+    font-family: 'Arial', sans-serif;
+    background: transparent;
+}
+
+.contact-us-container h1,
+.contact-us-container h2 {
+    color: #ffffff;
+}
+
+.contact-us-container p,
+.contact-us-container form,
+.contact-us-container .other-contacts {
+    margin-bottom: 20px;
+}
+
+.contact-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+}
+
+.contact-form button.btn {
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.contact-form button.btn:hover {
+    background-color: #0f4b01;
+}
+
+.other-contacts p {
+    margin: 5px 0;
+}
+
+@media (max-width: 768px) {
+    .contact-us-container {
+        padding: 10px;
+    }
+}

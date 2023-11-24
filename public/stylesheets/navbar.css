@@ -1,0 +1,44 @@
+.cover-container {
+    max-width: 60vw;
+}
+
+.nav-link {
+    padding: 0.25rem 0;
+    font-weight: 700;
+    color: rgb(255, 255, 255);
+    margin-left: 1rem;
+    border-bottom: 0.25rem solid transparent;
+}
+
+.nav-link:hover {
+    color: rgba(255, 255, 255, 0.5);
+    border-bottom-color: rgba(255, 255, 255, 0.5);
+}
+
+.nav-link.active {
+    color: white;
+    border-bottom-color: white;
+}
+
+.btn-secondary,
+.btn-secondary:hover {
+    color: #333;
+    text-shadow: none;
+}
+
+.navBarLogo-container {
+    height: 100%;
+    /* Logo container takes full height of the navbar */
+    display: flex;
+    align-items: center;
+    /* Centers the logo vertically */
+    padding: 0;
+    /* Remove padding to avoid any extra space inside the container */
+}
+
+.navBarLogo-container img {
+    max-height: 4rem;
+    /* Adjust the size as needed */
+    /* width: auto; */
+    /* Maintain aspect ratio */
+}

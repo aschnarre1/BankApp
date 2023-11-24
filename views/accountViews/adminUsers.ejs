@@ -1,0 +1,38 @@
+<% layout("layouts/boilierplate")%>
+    <link rel="stylesheet" href="/stylesheets/allBank.css">
+
+    <h1>Admin View of All Users</h1>
+
+    <input type="text" id="searchBar" placeholder="Search by username" oninput="filterAccounts()">
+
+    <% for (let user of users){ %>
+        <div class=" card" data-username="<%= user.username %>">
+            <div class="card-header">
+                <h3>
+                    <a href="/accountViews/userDetails/<%= user._id %>">
+                        User: <%= user.username %>
+                    </a>
+                </h3>
+            </div>
+
+        </div>
+
+        <% }%>
+
+
+
+            <script>
+                function filterAccounts() {
+                    const searchValue = document.getElementById('searchBar').value.toLowerCase();
+                    const accounts = document.querySelectorAll('.card');
+
+                    accounts.forEach(account => {
+                        const username = account.getAttribute('data-username').toLowerCase();
+                        if (username.includes(searchValue)) {
+                            account.style.display = 'block';
+                        } else {
+                            account.style.display = 'none';
+                        }
+                    });
+                }
+            </script>

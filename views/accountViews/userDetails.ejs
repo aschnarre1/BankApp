@@ -1,0 +1,56 @@
+<% layout("layouts/boilierplate") %>
+    <link rel="stylesheet" href="/stylesheets/allBank.css">
+
+
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h2>
+                    User name: <%= user.username %>
+                </h2>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    Email: <%= user.email %>
+                </h5>
+                <h5 class="card-title">
+                    Gross Income: <%= user.grossIncome %>
+                </h5>
+                <h5 class="card-title">
+                    Address: <%= user.address %>
+                </h5>
+                <h5 class="card-title">
+                    Phone Number: <%= user.phoneNumber %>
+                </h5>
+                <h5 class="card-title">
+                    SSN: <%= user.ssn %>
+                </h5>
+                <h5 class="card-title">
+                    Number of Accounts: <%= user.numOfAccounts %>
+                </h5>
+                <div class="card-title">
+                    <h5>Accounts:</h5>
+                    <ul>
+                        <% user.accountIds.forEach(function(account) { %>
+                            <li>
+                                <a href=" /accountViews/<%=account._id %>">Account Type: <%= account.accountType %>
+                                </a>
+                            </li>
+                            <% }); %>
+                    </ul>
+                </div>
+
+
+
+                <h5 class="card-title">
+                    Valid ID:
+                </h5>
+                <img src="<%= user.validId.url %>" alt="Valid ID" style="max-width: 100%; height: auto;">
+
+
+
+
+            </div>
+
+        </div>
+    </div>

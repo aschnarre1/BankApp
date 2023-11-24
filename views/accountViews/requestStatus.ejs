@@ -1,0 +1,81 @@
+<% layout("layouts/boilierplate") %>
+    <link rel="stylesheet" href="/stylesheets/allBank.css">
+
+    <h1>Requests Status</h1>
+
+    <% for (let request of requests) { %>
+        <% if (currentUser && account && account.holder.equals(currentUser._id)) { %>
+
+            <% let reqColor='' ; %>
+                <% if (request.approved !==null && request.approved !==undefined) { %>
+                    <% reqColor=String(request.approved).toLowerCase(); %>
+                        <% } else{ %>
+                            <% reqColor="pending" %>
+                                <% } %>
+                                    <div class="card" id="<%= reqColor %>">
+                                        <div class="card-header">
+                                            <h4>
+                                                <% if (!request.creditCardInfo && !request.loanInfo) { %>
+                                                    Deposit Request for <%= request && request.accountFrom ?
+                                                        request.accountFrom.accountType : 'Unknown' %> Account
+                                                        <% } else if (request.creditCardInfo) { %>
+                                                            Credit Card Request: <%=
+                                                                request.creditCardInfo.creditCardType || 'Unknown' %>
+                                                                Card
+                                                                <% } else if (request.loanInfo) { %>
+                                                                    Loan Request: <%= request.loanInfo.loanType
+                                                                        || 'Unknown' %>
+                                                                        Loan
+                                                                        <% } else { %>
+                                                                            Unknown Request Type
+                                                                            <% } %>
+                                            </h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>
+                                                <% if (!request.creditCardInfo && !request.loanInfo) { %>
+                                                    Amount: $<%= (request.amountInCents / 100).toFixed(2) %>
+                                                        <% } else if (request.loanInfo) { %>
+                                                            <p>Loan Amount: $<%= (request.amountInCents /
+                                                                    100).toFixed(2) %>
+                                                            </p>
+                                                            <p>
+                                                                Loan Term: <%= request.loanInfo.loanTerm %>
+                                                            </p>
+                                                            <p>
+                                                                Monthly Minimum: $<%=
+                                                                    (request.loanInfo.monthlyMinimumInCents /
+                                                                    100).toFixed(2) %>
+                                                            </p>
+
+
+                                                            <% } %>
+                                            </p>
+                                            <p>Status: <%= request.approved !==null ? (request.approved ? 'Approved'
+                                                    : 'Denied' ) : 'Pending' %>
+                                            </p>
+                                            <p>Request ID: <%= request._id %>
+                                            </p>
+                                            <% if (request.creditCardInfo) { %>
+                                                <p>Employment Status: <%= request.creditCardInfo ?
+                                                        request.creditCardInfo.employmentStatus :
+                                                        request.loanInfo.employmentStatus %>
+                                                </p>
+                                                <p>
+                                                    <% if (request.creditCardInfo && request.creditCardInfo.grossIncome)
+                                                        { %>
+                                                        Gross Income: $<%=
+                                                            request.creditCardInfo.grossIncome.toLocaleString() %>
+                                                            <% } else if (request.loanInfo &&
+                                                                request.loanInfo.grossIncome) { %>
+                                                                Gross Income: $<%=
+                                                                    request.loanInfo.grossIncome.toLocaleString() %>
+                                                                    <% } else { %>
+                                                                        Gross Income: Not Available
+                                                                        <% } %>
+                                                </p>
+                                                <% } %>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                        <% } %>

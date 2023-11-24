@@ -1,0 +1,33 @@
+<% layout("layouts/boilierplate") %>
+    <link rel="stylesheet" href="/stylesheets/allBank.css">
+
+    <h1>Admin Messages</h1>
+
+    <% for (let message of messages) { %>
+        <% if(message.isRead===null) { %>
+
+
+            <div class="card">
+                <div class="card-header">
+                    <form action="/accountViews/adminMessageRead/<%= message._id %>" method="post"
+                        style="display: inline;">
+                        <button type="submit" class="btn btn-primary">Read</button>
+                    </form>
+                </div>
+
+                <div class="card-body">
+                    <p>
+                        <strong>
+                            <%=message.name%>:
+                        </strong>
+                        <%= message.message %>
+                    </p>
+                </div>
+
+            </div>
+
+
+
+
+            <% } %>
+                <% } %>

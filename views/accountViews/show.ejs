@@ -1,0 +1,99 @@
+<% layout("layouts/boilierplate")%>
+    <link rel="stylesheet" href="/stylesheets/showStyle.css">
+    <link rel="stylesheet" href="/stylesheets/allBank.css">
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                Account Details
+            </div>
+            <div class="card-body">
+                <% if(account.isLocked) { %>
+                    <form action="/accountViews/<%= account._id %>/Unlock" method="post">
+                        <button type="submit" class="btn btn-primary">Unlock</button>
+                    </form>
+
+                    <% }else { %>
+                        <form action="/accountViews/<%= account._id %>/Lock" method="post">
+                            <button type="submit" class="btn btn-primary">Lock</button>
+                        </form>
+
+                        <% } %>
+                            <h5 class="card-title">Account Type: <%= account.accountType %>
+                            </h5>
+                            <% const totalInDollars=(account.totalInCents / 100).toFixed(2); %>
+                                <p class="card-text">Total: $<%= totalInDollars %> -<%= account.holder.username%>
+                                </p>
+                                <% if(account.accountType.trim().toLowerCase()==="credit" ) {%>
+                                    <p class="card-text">Limit: $<%= account.creditLimit %>
+                                    </p>
+                                    <p class="card-text">Credit Card Name: <%= account.creditCardName %>
+                                    </p>
+                                    <p class="card-text">Next Payment Date: <%= account.nextPaymentDueDate %>
+                                    </p>
+
+
+                                    <% const minimumPaymentInDollars=(account.minimumPaymentInCents / 100).toFixed(2);
+                                        %>
+                                        <p class="card-text">Minimum monthly payment: $<%= minimumPaymentInDollars %>
+                                        </p>
+                                        <% } %>
+
+
+
+                                            <% if(account.accountType.trim().toLowerCase()==="loan" ) {%>
+                                                <p class="card-text">loanType: <%= account.loanInfo.loanType %>
+                                                </p>
+                                                <p class="card-text">Loan Term: <%= account.loanInfo.loanTerm %>
+                                                </p>
+                                                <p class="card-text">Next Payment Date: <%= account.nextPaymentDueDate
+                                                        %>
+                                                </p>
+                                                <% const monthlyMinimumInDollars=(account.loanInfo.monthlyMinimumInCents
+                                                    / 100).toFixed(2); %>
+                                                    <p class="card-text">Minimum monthly payment: $<%=
+                                                            monthlyMinimumInDollars %>
+                                                    </p>
+                                                    <% } %>
+
+                                                        <% if(account.accountType.trim().toLowerCase() !="credit" &&
+                                                            account.accountType.trim().toLowerCase() !="loan" &&
+                                                            account.accountType.trim().toLowerCase() !="bank" ) {%>
+                                                            <% if( currentUser &&
+                                                                account.holder.equals(currentUser._id)) {%>
+                                                                <a href="/accountViews/<%= account._id %>/editAccount"
+                                                                    class="btn btn-primary">Deposit</a>
+                                                                <% } %>
+                                                                    <% } %>
+                                                                        <% if(account.total===0) {%>
+                                                                            <form
+                                                                                action="/accountViews/<%=account._id%>?_method=DELETE"
+                                                                                method="POST" class="d-inline-block">
+                                                                                <button class="btn btn-danger">Delete
+                                                                                    Account</button>
+                                                                            </form>
+                                                                            <% } %>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <h5>Account history</h5>
+    <% for (let transaction of account.transactions) { %>
+        <% let transColor=transaction.type.toLowerCase(); %>
+            <div class="card" id="<%= transColor %>">
+                <div class="card-header">
+
+                    <% const transactionInDollars=(transaction.amountInCents / 100).toFixed(2); %>
+                        Transaction Amount: <%= transactionInDollars %>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Transaction type: <%= transaction.type %>
+                    </p>
+                    <p class="card-text">Transaction date: <%= transaction.date %>
+                    </p>
+                </div>
+            </div>
+            <% } %>

@@ -1,0 +1,62 @@
+body {
+    background: linear-gradient(to right, #007bff, #000);
+    /* Blue to black gradient */
+    color: white;
+    /* White text color */
+    font-family: 'Arial', sans-serif;
+    /* Default font */
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    background-color: #f7f7f7;
+    padding: 15px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.card-header h4 {
+    margin: 0;
+    color: #333;
+    font-size: 1.25rem;
+}
+
+.card-header a {
+    color: inherit;
+}
+
+.card-header a:hover {
+    color: #007bff;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+#depositFoot a {
+    color: white;
+}
+
+#true {
+    color: green;
+}
+
+#false {
+    color: red;
+}
+
+#pending {
+    color: rgb(151, 161, 4);
+}

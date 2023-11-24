@@ -1,0 +1,108 @@
+<link rel="stylesheet" href="/stylesheets/navbar.css">
+
+
+<nav class="navbar sticky-top bg-dark navbar-expand-lg border-bottom border-body" data-bs-theme="dark">
+    <div class="container-fluid">
+        <!-- <a class="navbar-brand" href="#">BankApp</a> -->
+
+        <div class="navBarLogo-container">
+            <a href="/">
+                <img src="/images/BankNavBarLogo.png" alt="BankApp Logo" class="home-logo">
+            </a>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link" href="/creditCardInfo">Credit Cards</a>
+                <a class="nav-link" href="/loanInfo">Loans</a>
+                <a class="nav-link" href="/aboutUs">About Us</a>
+                <a class="nav-link" href="/contactUs">Contact Us</a>
+            </div>
+            <div class="navbar-nav ms-auto">
+                <% if(!currentUser) { %>
+                    <a class="nav-link" href="/login">Login</a>
+                    <a class="nav-link" href="/register">Register</a>
+                    <% } else if(currentUser.username=="admin" ) { %>
+                        <a class="nav-link" href="/accountViews/adminUsers">All Users</a>
+                        <a class="nav-link" href="/accountViews/adminView">All Accounts</a>
+
+
+
+                        <a class="nav-link" href="/accountViews/adminRequests">
+                            Requests <span class="badge bg-danger admin-requests-count" style="display:none;"></span>
+                        </a>
+
+
+                        <a class="nav-link" href="/accountViews/adminMessages">
+                            Messages <span class="badge bg-danger admin-messages-count" style="display:none;"></span>
+                        </a>
+
+
+
+
+
+                        <a class="nav-link" href="/logout">Logout</a>
+                        <% } else { %>
+                            <a class="nav-link" href="/accountViews/myAccounts">My Accounts</a>
+                            <a class="nav-link" href="/accountViews/newAccount">New Account</a>
+                            <a class="nav-link" href="/accountViews/transfer">Transfer/Pay</a>
+                            <a class="nav-link" href="/accountViews/requestStatus">Request's Status</a>
+                            <a class="nav-link" href="/logout">Logout</a>
+                            <% } %>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+
+
+<% if(currentUser && currentUser.isAdmin) { %>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/getMessageCount')
+                .then(response => response.json())
+                .then(data => {
+                    const countBadge = document.querySelector('.admin-messages-count');
+                    if (data.pendingMessageCount && data.pendingMessageCount > 0) {
+                        countBadge.textContent = data.pendingMessageCount;
+                        countBadge.style.display = 'inline-block';
+                    } else {
+                        countBadge.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching message count:', error);
+                });
+        });
+    </script>
+
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/getRequestCount')
+                .then(response => response.json())
+                .then(data => {
+                    const countBadge = document.querySelector('.admin-requests-count');
+                    if (data.pendingRequestCount && data.pendingRequestCount > 0) {
+                        countBadge.textContent = data.pendingRequestCount;
+                        countBadge.style.display = 'inline-block';
+                    } else {
+                        countBadge.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching request count:', error);
+                });
+        });
+    </script>
+
+
+    <% } %>

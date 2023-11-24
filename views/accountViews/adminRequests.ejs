@@ -1,0 +1,60 @@
+<% layout("layouts/boilierplate") %>
+    <link rel="stylesheet" href="/stylesheets/allBank.css">
+    <h1>Admin View Requests</h1>
+
+    <% for (let request of requests) { %>
+        <% if(request.approved===null) { %>
+            <% if(!request.creditCardInfo && !request.loanInfo) { %>
+                <div class="card">
+                    <div class="card-header">
+                        <h4>
+                            <a href="/accountViews/requestDetails/<%= request._id %>">User:
+                                <% if (request.accountFrom && request.accountFrom.id && request.accountFrom.id.holder) {
+                                    %>
+                                    <%= request.accountFrom.id.holder.username %>
+                                        <% } else { %>
+                                            Unknown
+                                            <% } %>
+                                                <% const requestInDollars=(request.amountInCents / 100).toFixed(2); %>
+                                                    wants to deposit $<%= requestInDollars %> into their <%=
+                                                            request.accountFrom.accountType %> account.
+                            </a>
+                        </h4>
+                    </div>
+                </div>
+                <% } else if(request.creditCardInfo) { %>
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>
+                                <a href="/accountViews/requestDetails/<%= request._id %>">User:
+                                    <% if (request.accountFrom && request.accountFrom.id &&
+                                        request.accountFrom.id.holder) { %>
+                                        <%= request.accountFrom.id.holder.username %>
+                                            <% } else { %>
+                                                Unknown
+                                                <% } %>
+                                                    is requesting a <%= request.creditCardInfo.creditCardType %>
+                                                        card
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                    <% } else if(request.loanInfo) { %>
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>
+                                    <a href="/accountViews/requestDetails/<%= request._id %>">User:
+                                        <% if (request.accountFrom && request.accountFrom.id &&
+                                            request.accountFrom.id.holder) { %>
+                                            <%= request.accountFrom.id.holder.username %>
+                                                <% } else { %>
+                                                    Unknown
+                                                    <% } %>
+                                                        is requesting a <%= request.loanInfo.loanType %> loan
+                                    </a>
+                                </h4>
+                            </div>
+                        </div>
+                        <% } %>
+                            <% } %>
+                                <% } %>

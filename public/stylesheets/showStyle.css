@@ -1,0 +1,55 @@
+#deposit {
+    color: green;
+}
+
+#withdrawal {
+    color: red;
+}
+
+
+
+
+.carousel-container {
+    width: 875px;
+    height: 600px;
+    position: relative;
+    overflow: hidden;
+    margin: auto;
+}
+
+.carousel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+}
+
+.carousel-control-prev {
+    left: 0;
+}
+
+.carousel-control-next {
+    right: 0;
+}
+
+.border-container {
+    border: 5px solid black;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: black;
+
+}

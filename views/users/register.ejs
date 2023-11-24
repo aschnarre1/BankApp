@@ -1,0 +1,122 @@
+<% layout('layouts/boilierplate')%>
+    <link rel="stylesheet" href="/stylesheets/allBank.css">
+    <h1>Register</h1>
+    <form action="/register" method="POST" class="validated-form" novalidate enctype="multipart/form-data">
+        <div class="mb-3">
+            <label class="form-label" for="username">Username</label>
+            <input class="form-control" type="text" id="username" name="username" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-control" type="email" id="email" name="email"
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="password">Password</label>
+            <input class="form-control" type="password" id="password" name="password" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="grossIncome">Gross Income</label>
+            <input type="text" class="form-control" id="grossIncome" name="grossIncome" required
+                oninput="formatAsDollars(this)">
+
+
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="ssn">Social Security Number</label>
+            <input type="text" class="form-control" id="ssn" name="ssn" required oninput="formatSSN(this)">
+
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="address">Address</label>
+            <input class="form-control" type="text" id="address" name="address" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="phoneNumber">Phone Number</label>
+            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" required
+                oninput="formatPhoneNumber(this)">
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="validId">Upload Valid ID</label>
+            <input class="form-control" type="file" id="validId" name="validId" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+
+        <button class="btn btn-success">Register</button>
+    </form>
+
+
+
+
+
+
+
+    <script>
+        function formatAsDollars(input) {
+            let value = input.value.replace(/[\D\s\._\-]+/g, "");
+            if (!value || isNaN(value)) {
+                input.value = "";
+                return;
+            }
+            value = parseInt(value, 10);
+            input.value = (value === 0) ? "" : '$' + value.toLocaleString("en-US");
+        }
+
+    </script>
+
+
+
+    <script>
+        function formatSSN(input) {
+            let value = input.value.replace(/\D/g, '').slice(0, 9);
+            if (value.length > 5) {
+                input.value = `${value.slice(0, 3)}-${value.slice(3, 5)}-${value.slice(5)}`;
+            } else if (value.length > 3) {
+                input.value = `${value.slice(0, 3)}-${value.slice(3)}`;
+            } else {
+                input.value = value;
+            }
+        }
+    </script>
+
+
+    <script>
+        function formatPhoneNumber(input) {
+            let value = input.value.replace(/\D/g, '').slice(0, 10);
+            if (value.length > 6) {
+                input.value = `${value.slice(0, 3)}-${value.slice(3, 6)}-${value.slice(6)}`;
+            } else if (value.length > 3) {
+                input.value = `${value.slice(0, 3)}-${value.slice(3)}`;
+            } else {
+                input.value = value;
+            }
+        }
+    </script>

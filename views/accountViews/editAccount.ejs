@@ -1,0 +1,66 @@
+<% layout("layouts/boilierplate")%>
+    <link rel="stylesheet" href="/stylesheets/allBank.css">
+    <h1>Request Deposit</h1>
+    <form action="/accountViews/<%= account._id %>/requests" method="post" novalidate class="validated-form"
+        enctype="multipart/form-data">
+
+        <div class="mb-3">
+            <label for="deposit" class="form-label">Deposit Amount: </label>
+            <input type="text" class="form-control" id="deposit" name="account[deposit]" required>
+            <div class="valid-feedback"> Looks Good!</div>
+        </div>
+
+
+
+        <div class="mb-3">
+            <label for="accountFrom" class="form-label">Account Id: </label>
+            <input type="text" class="form-control" id="accountFrom" name="account[accountFrom]"
+                value="<%= account._id %>" readonly>
+            <div class="valid-feedback"> Looks Good!</div>
+        </div>
+
+
+        <div class="mb-3">
+            <label for="formFileMultiple" class="form-label">Add Images of your Check</label>
+            <input type="file" class="form-control" id="formFileMultiple" name="image" multiple>
+            <div class="invalid-feedback">
+                You need to submit a picture of your check
+            </div>
+        </div>
+
+
+
+        <% let depositBlocked=true; for(let account of accounts) { if(account.isFrozen || account.isLocked) {
+            depositBlocked=false; break; } } %>
+
+            <% if(depositBlocked) { %>
+                <button type="submit" class="btn btn-success">Send Request</button>
+                <%} else{ %>
+                    <p>Can not deposit while account is locked or frozen</p>
+                    <% } %>
+
+
+
+    </form>
+
+    <script>
+        document.getElementById('deposit').addEventListener('input', function (event) {
+            let input = event.target.value;
+            input = input.replace(/[^0-9]/g, ''); // Remove any non-numeric characters
+            if (input.length === 0) return; // If the input is empty, do nothing
+            input = parseInt(input); // Convert the string to an integer
+            event.target.value = (input / 100).toFixed(2); // Convert to decimal and fix to 2 decimal places
+        });
+    </script>
+
+
+    <script>
+        document.getElementById('deposit').addEventListener('keydown', function (event) {
+            if (!event.key.match(/[0-9]/) && event.key !== 'Backspace' && event.key !== 'Tab' && event.key !== 'Enter' && event.key !== 'ArrowLeft' && event.key !== 'ArrowRight' && event.key !== 'Delete') {
+                event.preventDefault();
+            }
+        });
+    </script>
+
+
+    <footer id="depositFoot"><a href="/accountViews/<%= account._id %>">Return to Showing the Account</a></footer>

@@ -1,0 +1,196 @@
+body {
+    background: linear-gradient(to right, #007bff, #000);
+    /* Blue to black gradient */
+    color: white;
+    /* White text color */
+    font-family: 'Arial', sans-serif;
+    /* Default font */
+}
+
+
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.card-info {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 30%;
+    text-align: center;
+}
+
+.card-info h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.saphire {
+    border-top: 5px solid #3a7bd5;
+    border-bottom: 5px solid #3a7bd5;
+    color: black;
+}
+
+.ruby {
+    border-top: 5px solid #e74c3c;
+    border-bottom: 5px solid #e74c3c;
+    color: black;
+}
+
+.emerald {
+    border-top: 5px solid #2ecc71;
+    border-bottom: 5px solid #2ecc71;
+    color: black;
+}
+
+
+
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .card-info {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}
+
+
+.loan-info {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 10px;
+    width: calc(20% - 20px);
+    /* Adjust width as necessary */
+    text-align: center;
+}
+
+.loan-info h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.house {
+    border-top: 5px solid #4CAF50;
+    border-bottom: 5px solid #4CAF50;
+    color: black;
+}
+
+.car {
+    border-top: 5px solid #2196F3;
+    border-bottom: 5px solid #2196F3;
+    color: black;
+}
+
+.business {
+    border-top: 5px solid #FFC107;
+    border-bottom: 5px solid #FFC107;
+    color: black;
+}
+
+.student {
+    border-top: 5px solid #9C27B0;
+    border-bottom: 5px solid #9C27B0;
+    color: black;
+}
+
+.personal {
+    border-top: 5px solid #E91E63;
+    border-bottom: 5px solid #E91E63;
+    color: black;
+}
+
+
+
+@media (max-width: 1024px) {
+    .loan-info {
+        width: calc(33.333% - 20px);
+        /* 3 per row */
+    }
+}
+
+@media (max-width: 768px) {
+    .loan-info {
+        width: calc(50% - 20px);
+        /* 2 per row */
+    }
+}
+
+@media (max-width: 480px) {
+    .loan-info {
+        width: 100%;
+        /* 1 per row */
+    }
+}
+
+
+@media (max-width: 1000px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* Center align the loan-info cards */
+    }
+
+    .loan-info {
+        width: 80%;
+        /* Adjust the width to your preference */
+        margin: 10px 0;
+        /* Add vertical margin */
+    }
+}
+
+
+
+
+.about-us-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    color: #ffffff;
+    font-family: 'Arial', sans-serif;
+    background-color: transparent;
+}
+
+.about-us-container h1 {
+    text-align: center;
+    color: #ffffff;
+}
+
+.about-us-container h2 {
+    color: rgb(255, 255, 255);
+    margin-top: 20px;
+}
+
+.about-us-container p {
+    line-height: 1.6;
+}
+
+.our-values ul {
+    list-style: none;
+    padding: 0;
+}
+
+.our-values li {
+    margin-bottom: 10px;
+}
+
+.our-values li strong {
+    color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .about-us-container {
+        padding: 10px;
+    }
+}
