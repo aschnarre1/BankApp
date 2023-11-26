@@ -60,3 +60,35 @@ body {
 #pending {
     color: rgb(151, 161, 4);
 }
+
+
+
+
+@media (max-width: 1050px) {
+    .carousel-container {
+        width: 650px;
+        height: 433px;
+    }
+
+    /* Other responsive adjustments as needed */
+}
+
+
+@media (max-width: 768px) {
+    .carousel-container {
+        width: 450px;
+        height: 300px;
+    }
+
+    /* Other responsive adjustments as needed */
+}
+
+
+@media (max-width: 520px) {
+    .carousel-container {
+        width: 275px;
+        height: 183px;
+    }
+
+    /* Other responsive adjustments as needed */
+}
