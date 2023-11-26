@@ -92,6 +92,7 @@ module.exports.register = async (req, res, next) => {
         const encryptedGrossIncome = encrypt(grossIncome.toString());
         const encryptedAddress = encrypt(address);
         const encryptedPhoneNumber = encrypt(phoneNumber);
+        const encryptedemail = encrypt(email);
 
         let encryptedValidIdUrl = '';
         let encryptedValidIdFilename = '';
@@ -101,8 +102,8 @@ module.exports.register = async (req, res, next) => {
         }
 
         const user = new User({
-            email,
             username,
+            email: encryptedemail,
             grossIncome: encryptedGrossIncome,
             ssn: encryptedSSN,
             address: encryptedAddress,
@@ -232,6 +233,7 @@ module.exports.renderUserDetails = async (req, res) => {
         user.ssn = decrypt(user.ssn);
         user.grossIncome = decrypt(user.grossIncome);
         user.address = decrypt(user.address);
+        user.email = decrypt(user.email);
         user.phoneNumber = decrypt(user.phoneNumber);
         user.validId.url = decrypt(user.validId.url);
         user.validId.filename = decrypt(user.validId.filename);
