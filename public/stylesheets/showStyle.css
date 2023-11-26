@@ -8,7 +8,7 @@
 
 
 
-
+/* 
 .carousel-container {
     width: 875px;
     height: 600px;
@@ -22,7 +22,30 @@
     height: 100%;
     object-fit: cover;
     position: absolute;
+} */
+
+
+.carousel-container {
+    width: 100%;
+    /* Use percentage for responsive width */
+    height: auto;
+    /* Auto height to maintain aspect ratio */
+    position: relative;
+    overflow: hidden;
 }
+
+.carousel-image {
+    width: 100%;
+    /* Full width of the container */
+    height: auto;
+    /* Auto height to maintain aspect ratio */
+    object-fit: cover;
+    /* Cover to ensure image covers the container */
+    position: absolute;
+}
+
+
+
 
 .carousel-control-prev,
 .carousel-control-next {
@@ -52,4 +75,13 @@
 .carousel-control-next-icon {
     background-color: black;
 
+}
+
+@media (max-width: 768px) {
+    .carousel-container {
+        height: auto;
+        /* Adjust height for smaller screens */
+    }
+
+    /* Other responsive adjustments as needed */
 }
