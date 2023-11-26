@@ -26,6 +26,14 @@
 
 
 
+@media (max-width: 768px) {
+    .carousel-container {
+        height: auto;
+        /* Adjust height for smaller screens */
+    }
+
+    /* Other responsive adjustments as needed */
+}
 
 
 
