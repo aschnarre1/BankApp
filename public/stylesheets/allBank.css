@@ -65,7 +65,7 @@ body {
 
 
 @media (max-width: 1050px) {
-    .carousel-container {
+    .userImg {
         width: 650px;
         height: 433px;
     }
@@ -75,7 +75,7 @@ body {
 
 
 @media (max-width: 768px) {
-    .carousel-container {
+    .userImg {
         width: 450px;
         height: 300px;
     }
@@ -85,7 +85,7 @@ body {
 
 
 @media (max-width: 520px) {
-    .carousel-container {
+    .userImg {
         width: 275px;
         height: 183px;
     }
