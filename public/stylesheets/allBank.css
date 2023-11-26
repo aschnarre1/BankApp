@@ -65,30 +65,28 @@ body {
 
 
 @media (max-width: 1050px) {
-    .userImg {
-        width: 650px;
-        height: 433px;
+    #userImg {
+        width: 100%;
+        /* Adjust to container width */
+        height: auto;
+        /* Maintain aspect ratio */
     }
-
-    /* Other responsive adjustments as needed */
 }
-
 
 @media (max-width: 768px) {
-    .userImg {
-        width: 450px;
-        height: 300px;
+    #userImg {
+        width: 100%;
+        /* Adjust to container width */
+        height: auto;
+        /* Maintain aspect ratio */
     }
-
-    /* Other responsive adjustments as needed */
 }
 
-
 @media (max-width: 520px) {
-    .userImg {
-        width: 275px;
-        height: 183px;
+    #userImg {
+        width: 100%;
+        /* Adjust to container width */
+        height: auto;
+        /* Maintain aspect ratio */
     }
-
-    /* Other responsive adjustments as needed */
 }
