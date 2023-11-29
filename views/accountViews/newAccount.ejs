@@ -52,7 +52,8 @@
             </select>
 
             <label for="grossIncomeCredit">Total Gross Income: </label>
-            <input type="text" class="form-control" id="grossIncomeCredit" name="account[grossIncome]" required>
+            <input type="text" class="form-control" id="grossIncomeCredit" name="account[grossIncome]" placeholder="$0"
+                required>
 
 
             <button type="submit" class="btn btn-success">Request</button>
@@ -68,11 +69,11 @@
         <h1>Loan Request</h1>
 
         <label for="loanAmount">Loan Amount:</label>
-        <input type="text" class="form-control" id="loanAmount" name="account[loanAmount]" required>
+        <input type="text" class="form-control" id="loanAmount" name="account[loanAmount]" placeholder="$0" required>
 
 
         <label for="grossIncome">Total Gross Income: </label>
-        <input type="text" class="form-control" id="grossIncome" name="account[grossIncome]" required>
+        <input type="text" class="form-control" id="grossIncome" name="account[grossIncome]" placeholder="$0" required>
 
 
         <label for="loanType">Loan Type:</label>
@@ -113,7 +114,7 @@
             const grossIncomeInput = document.getElementById('grossIncome');
             const loanAmountInput = document.getElementById('loanAmount');
             const loanTermSelect = document.getElementById('loanTerm');
-            const loanTypeSelect = document.getElementById('loanType'); // Assuming you have a select element for loan types
+            const loanTypeSelect = document.getElementById('loanType');
             const minimumMonthlyInput = document.getElementById('minimumMonthly');
 
             function calculateLoanPayment(amount, annualRate, termYears) {
@@ -127,45 +128,44 @@
                 let baseRate;
                 let incomeRateAdjustment;
 
-                // Define base rates for different loan types
                 switch (loanType) {
                     case 'House':
-                        baseRate = 0.08; // Base rate for House Mortgage
+                        baseRate = 0.08;
                         break;
                     case 'Car':
-                        baseRate = 0.07; // Base rate for Car Loan
+                        baseRate = 0.07;
                         break;
                     case 'Business':
-                        baseRate = 0.06; // Base rate for Business Loan
+                        baseRate = 0.06;
                         break;
                     case 'Student':
-                        baseRate = 0.035; // Base rate for Student Loan
+                        baseRate = 0.035;
                         break;
                     case 'Personal':
-                        baseRate = 0.06; // Base rate for Personal Loan
+                        baseRate = 0.06;
                         break;
                     default:
-                        baseRate = 0.05; // Default rate if none selected
+                        baseRate = 0.05;
                 }
 
-                // Define adjustments based on income brackets
+
                 if (income < 20000) {
-                    incomeRateAdjustment = 0.01; // Higher risk, higher rate
+                    incomeRateAdjustment = 0.01;
                 } else if (income >= 20000 && income < 50000) {
                     incomeRateAdjustment = 0.005;
                 } else if (income >= 50000 && income < 100000) {
                     incomeRateAdjustment = 0;
                 } else if (income >= 100000) {
-                    incomeRateAdjustment = -0.005; // Lower risk, lower rate
+                    incomeRateAdjustment = -0.005;
                 } else {
-                    incomeRateAdjustment = 0; // Default case if income is not a number
+                    incomeRateAdjustment = 0;
                 }
 
-                // Adjust base rate by the incomeRateAdjustment
+
                 let adjustedRate = baseRate + incomeRateAdjustment;
 
-                // Ensure the adjusted rate does not fall below a minimum threshold
-                let minimumRateThreshold = 0.02; // Example minimum rate
+
+                let minimumRateThreshold = 0.02;
                 if (adjustedRate < minimumRateThreshold) {
                     adjustedRate = minimumRateThreshold;
                 }
@@ -214,7 +214,7 @@
             grossIncomeInput.addEventListener('input', updateMinimumMonthly);
             loanAmountInput.addEventListener('input', updateMinimumMonthly);
             loanTermSelect.addEventListener('change', updateMinimumMonthly);
-            loanTypeSelect.addEventListener('change', updateMinimumMonthly); // Listen to changes in the loan type as well
+            loanTypeSelect.addEventListener('change', updateMinimumMonthly);
         });
     </script>
 

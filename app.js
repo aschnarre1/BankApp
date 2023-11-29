@@ -24,10 +24,10 @@ const mongoSanitize = require('express-mongo-sanitize');
 
 
 
-// const Account = require('./models/accounts');
+
 const { Account } = require('./models/accounts');
-const User = require('./models/user'); // User model
-const userController = require('./controllers/users'); // User controller
+const User = require('./models/user');
+const userController = require('./controllers/users');
 const userRoutes = require('./routes/users');
 const accountRoutes = require('./routes/accountRoute');
 const requestRoutes = require('./routes/request');
@@ -81,7 +81,7 @@ store.on("error", function (e) {
 
 const sessionConfig = {
     store,
-    name: "__uulp",   //name of cookie change
+    name: "__uulp",
     secret,
     resave: false,
     saveUninitialized: true,
@@ -121,40 +121,51 @@ async function initializeBankAccount() {
             let adminUser = await User.findOne({ username: 'admin' });
             if (!adminUser) {
                 const adminDetails = {
+                    firstName: 'Admin',
+                    lastName: 'User',
                     email: 'admin@admin.com',
                     username: 'admin',
                     password: 'admin',
-                    grossIncome: 0,
+                    grossIncome: '0',
                     ssn: '000-00-0000',
-                    address: '123 Finance Street, Money City, MC 12345',
+                    address: {
+                        line1: '123 Finance Street',
+                        line2: '',
+                        city: 'Money City',
+                        state: 'MC',
+                        zip: '12345',
+                        country: 'USA'
+                    },
                     phoneNumber: '000-000-0000',
                     validId: {
-                        url: 'path/to/dummy/image.jpg', // Provide a path to a dummy image
-                        filename: 'dummy_image.jpg' // Provide a dummy filename
+                        url: 'path/to/dummy/image.jpg',
+                        filename: 'dummy_image.jpg'
                     }
                 };
 
                 adminUser = new User({
                     email: adminDetails.email,
                     username: adminDetails.username,
-                    password: adminDetails.password, // Assuming you handle password hashing elsewhere
+                    firstName: adminDetails.firstName,
+                    lastName: adminDetails.lastName,
                     grossIncome: adminDetails.grossIncome,
                     ssn: adminDetails.ssn,
                     address: adminDetails.address,
                     phoneNumber: adminDetails.phoneNumber,
                     validId: adminDetails.validId,
-                    isAdmin: true // This is not in your schema, if you want to have it, you need to add it to the schema
+                    isAdmin: true,
                 });
-                const registeredAdmin = await User.register(adminUser, adminDetails.password);
 
-                adminUser = await User.findOne({ username: 'admin' });
+                const registeredAdmin = await User.register(adminUser, adminDetails.password);
+                adminUser.isAdmin = true;
+                await adminUser.save();
             }
 
             const bankAccount = new Account({
                 accountType: 'Bank',
                 totalInCents: 1000000000,
                 accountId: 'BANK-001',
-                holder: adminUser._id,
+                holder: adminUser ? adminUser._id : registeredAdmin._id,
                 transactions: []
             });
             await bankAccount.save();

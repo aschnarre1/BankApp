@@ -40,7 +40,16 @@ module.exports.transfer = async (req, res) => {
 module.exports.sendMessage = async (req, res) => {
     try {
         const { email, name, message } = req.body;
-        const newMessage = new Message({ email, name, message });
+
+        const tempName = capitalizeFirstLetter(name);
+        const tempEmail = email.toLowerCase();
+        const tempMessage = capitalizeFirstLetter(message);
+        const newMessage = new Message({
+            email: tempEmail.trim(),
+            name: tempName.trim(),
+            message: tempMessage.trim()
+        });
+
         await newMessage.save();
         req.flash('success', 'Your message has been sent successfully.');
         res.redirect('/contactUs');
@@ -51,7 +60,11 @@ module.exports.sendMessage = async (req, res) => {
     }
 }
 
-
+function capitalizeFirstLetter(string) {
+    return string.toLowerCase().replace(/\b(\w)/g, function (s) {
+        return s.toUpperCase();
+    });
+}
 
 
 
@@ -89,7 +102,7 @@ module.exports.processTransfer = async (req, res) => {
         const fromAccountId = req.body.transferFromAccount;
         const toUsername = req.body.transferToAccount;
         if (fromAccountId) {
-            const transferAmount = Math.round(req.body.account.totalInCents * 100);
+            const transferAmount = Math.round(req.body.account.totalInCents * 100).trim();
 
             const fromAccount = await Account.findById(fromAccountId);
             const toUser = await User.findOne({ username: toUsername });
@@ -180,7 +193,6 @@ module.exports.processTransferWithin = async (req, res) => {
             const fromAccount = await Account.findById(fromAccountId);
             const toAccount = await Account.findById(toAccountId);
 
-            // Check if the destination account is of type "Loan"
             if (toAccount.accountType === 'Loan') {
                 req.flash('error', 'Cannot transfer to a Loan account!');
                 return res.redirect('/accountViews/transfer');
@@ -203,13 +215,13 @@ module.exports.processTransferWithin = async (req, res) => {
             const toTransactionAmount = toAccount.accountType === 'Credit' ? -transferAmount : transferAmount;
 
             const fromTransaction = {
-                amountInCents: fromTransactionAmount,
+                amountInCents: fromTransactionAmount.trim(),
                 type: "Withdrawal",
                 date: new Date()
             };
 
             const toTransaction = {
-                amountInCents: toTransactionAmount,
+                amountInCents: toTransactionAmount.trim(),
                 type: "Deposit",
                 date: new Date()
             };
@@ -241,8 +253,7 @@ module.exports.payOffBalance = async (req, res) => {
     try {
         const fromAccountId = req.body.transferFromAccount;
         const payingOffAccountId = req.body.payingOffAccount;
-        const paymentAmountInCents = Math.round(req.body.account.totalInCents * 100);
-        // Fetch the accounts involved
+        const paymentAmountInCents = Math.round(req.body.account.totalInCents * 100).trim();
         const fromAccount = await Account.findById(fromAccountId);
         const payingOffAccount = await Account.findById(payingOffAccountId);
         const bankAccount = await Account.findOne({ accountId: "BANK-001" });
@@ -261,12 +272,11 @@ module.exports.payOffBalance = async (req, res) => {
             return res.redirect('/accountViews/transfer');
         }
 
-        // Update the balances
         fromAccount.totalInCents -= paymentAmountInCents;
         payingOffAccount.totalInCents -= paymentAmountInCents;
         bankAccount.totalInCents += paymentAmountInCents;
 
-        // Add transaction records
+
         fromAccount.transactions.push({
             amountInCents: -paymentAmountInCents,
             type: "Payment",
@@ -335,7 +345,6 @@ module.exports.createAccount = async (req, res) => {
         user.numOfAccounts += 1;
         user.accountIds.push(account._id);
         await user.save();
-        req.flash('success', 'Successfully made a new Account!');
         res.redirect(`/accountViews/${account._id}`)
     } catch (error) {
         console.error(error);
@@ -422,8 +431,6 @@ module.exports.updateAccountWithDeposit = async (req, res) => {
         });
 
         await request.save();
-
-        req.flash('success', 'Deposit request sent to admin for approval');
         res.redirect(`/accountViews/${id}`);
     } catch (error) {
         console.error(error);
@@ -443,7 +450,6 @@ module.exports.freezeAccount = async (req, res) => {
         }
         account.isFrozen = true;
         await account.save();
-        req.flash('success', 'Account frozen successfully');
         res.redirect('/accountViews/adminView');
     } catch (error) {
         console.error('Error:', error);
@@ -463,7 +469,6 @@ module.exports.unfreezeAccount = async (req, res) => {
         }
         account.isFrozen = false;
         await account.save();
-        req.flash('success', 'Account unfrozen successfully');
         res.redirect('/accountViews/adminView');
     } catch (error) {
         console.error('Error:', error);
@@ -483,7 +488,6 @@ module.exports.lockAccount = async (req, res) => {
         }
         account.isLocked = true;
         await account.save();
-        req.flash('success', 'Account locked successfully');
         res.redirect('/accountViews/myAccounts');
     } catch (error) {
         console.error('Error:', error);
@@ -503,7 +507,6 @@ module.exports.unlockAccount = async (req, res) => {
         }
         account.isLocked = false;
         await account.save();
-        req.flash('success', 'Account unlocked successfully');
         res.redirect('/accountViews/myAccounts');
     } catch (error) {
         console.error('Error:', error);
@@ -526,7 +529,6 @@ module.exports.deleteAccount = async (req, res) => {
             user.numOfAccounts -= 1;
             user.accountIds = user.accountIds.filter(accountId => !accountId.equals(account._id));
             await user.save();
-            req.flash('success', 'Successfully Deleted Account!');
             res.redirect("/accountViews/myAccounts")
         }
         else {

@@ -85,14 +85,56 @@ function decrypt(text) {
 
 module.exports.register = async (req, res, next) => {
     try {
-        const { email, username, password, grossIncome, ssn, address, phoneNumber } = req.body;
+        const { firstName, lastName, email, username, password, grossIncome, ssn, address, phoneNumber } = req.body;
+
+        const passwordRegex = /(?=.*[A-Z])(?=.*[!@#$&*])/;
+        if (!passwordRegex.test(password)) {
+            req.flash('error', 'Password must contain at least one uppercase letter and one special character.');
+            return res.redirect('/register');
+        }
+
+
+        const formattedUsername = username.toLowerCase().trim();
+        const existingUsername = await User.findOne({ username: formattedUsername });
+        if (existingUsername) {
+            req.flash('error', 'Username already exists.');
+            return res.redirect('/register');
+        }
+
+        const tempSSN = ssn.trim();
+        const encryptedSSN = encrypt(tempSSN);
+        const existingSSN = await User.findOne({ ssn: encryptedSSN });
+        if (existingSSN) {
+            req.flash('error', 'An account with this information already exists. Please contact support for assistance.');
+            return res.redirect('/register');
+        }
+
+
         const validIdImage = req.file;
 
-        const encryptedSSN = encrypt(ssn);
-        const encryptedGrossIncome = encrypt(grossIncome.toString());
-        const encryptedAddress = encrypt(address);
-        const encryptedPhoneNumber = encrypt(phoneNumber);
-        const encryptedemail = encrypt(email);
+        const encryptedGrossIncome = encrypt(grossIncome.toString().trim());
+
+        const encryptedAddress = {
+            line1: encrypt(capitalizeFirstLetter(address.line1).trim()),
+            line2: address.line2 ? encrypt(capitalizeFirstLetter(address.line2).trim()) : '',
+            city: encrypt(capitalizeFirstLetter(address.city).trim()),
+            state: encrypt(capitalizeFirstLetter(address.state).trim()),
+            zip: encrypt(address.zip).trim(),
+            country: encrypt(capitalizeFirstLetter(address.country).trim())
+        };
+
+
+        const tempNumber = phoneNumber.trim();
+        const encryptedPhoneNumber = encrypt(tempNumber);
+
+        const tempEmail = email.toLowerCase().trim();
+        const encryptedemail = encrypt(tempEmail);
+
+        const tempFirstName = capitalizeFirstLetter(firstName).trim();
+        const encryptedFirstName = encrypt(tempFirstName);
+
+        const tempLastName = capitalizeFirstLetter(lastName).trim();
+        const encryptedLastName = encrypt(tempLastName);
 
         let encryptedValidIdUrl = '';
         let encryptedValidIdFilename = '';
@@ -102,7 +144,9 @@ module.exports.register = async (req, res, next) => {
         }
 
         const user = new User({
-            username,
+            username: username.toLowerCase().trim(),
+            firstName: encryptedFirstName,
+            lastName: encryptedLastName,
             email: encryptedemail,
             grossIncome: encryptedGrossIncome,
             ssn: encryptedSSN,
@@ -121,7 +165,6 @@ module.exports.register = async (req, res, next) => {
             await registeredUser.save();
             req.login(registeredUser, err => {
                 if (err) return next(err);
-                req.flash('success', 'Welcome Admin!');
                 res.redirect('/accountViews/adminUsers');
             });
         } else {
@@ -141,7 +184,6 @@ module.exports.register = async (req, res, next) => {
 
             req.login(registeredUser, err => {
                 if (err) return next(err);
-                req.flash('success', 'Welcome to BankApp!');
                 res.redirect('/accountViews/myAccounts');
             });
         }
@@ -153,7 +195,11 @@ module.exports.register = async (req, res, next) => {
 };
 
 
-
+function capitalizeFirstLetter(string) {
+    return string.toLowerCase().replace(/\b(\w)/g, function (s) {
+        return s.toUpperCase();
+    });
+}
 
 
 module.exports.renderLogin = (req, res) => {
@@ -229,14 +275,21 @@ module.exports.renderUserDetails = async (req, res) => {
             return res.redirect('/accountViews/adminUsers');
         }
 
-
+        user.firstName = decrypt(user.firstName);
+        user.lastName = decrypt(user.lastName);
         user.ssn = decrypt(user.ssn);
         user.grossIncome = decrypt(user.grossIncome);
-        user.address = decrypt(user.address);
         user.email = decrypt(user.email);
         user.phoneNumber = decrypt(user.phoneNumber);
         user.validId.url = decrypt(user.validId.url);
         user.validId.filename = decrypt(user.validId.filename);
+
+        user.address.line1 = decrypt(user.address.line1);
+        user.address.line2 = user.address.line2 ? decrypt(user.address.line2) : '';
+        user.address.city = decrypt(user.address.city);
+        user.address.state = decrypt(user.address.state);
+        user.address.zip = decrypt(user.address.zip);
+        user.address.country = decrypt(user.address.country);
 
 
         res.render('accountViews/userDetails', { user: user.toObject() });
@@ -311,7 +364,6 @@ module.exports.adminMessageRead = async (req, res) => {
 
 module.exports.login = async (req, res) => {
     try {
-        req.flash('success', 'welcome back!');
         if (!req.user) {
             res.redirect('/login');
             return;
@@ -382,7 +434,6 @@ module.exports.getMessageCount = async (req, res) => {
 module.exports.logout = (req, res) => {
     try {
         req.logout(() => {
-            req.flash('success', "Goodbye!");
             res.redirect('/login');
         });
     } catch (error) {
@@ -398,7 +449,6 @@ module.exports.deleteUser = async (req, res) => {
         const { id } = req.params;
         await Account.deleteMany({ holder: id });
         await User.findByIdAndDelete(id);
-        req.flash('success', 'Successfully Deleted User!');
         res.redirect("/register")
     } catch (error) {
         console.error(error);

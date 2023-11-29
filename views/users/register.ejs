@@ -3,8 +3,25 @@
     <h1>Register</h1>
     <form action="/register" method="POST" class="validated-form" novalidate enctype="multipart/form-data">
         <div class="mb-3">
+            <label class="form-label" for="firstName">First Name</label>
+            <input class="form-control" type="text" id="firstName" name="firstName" pattern="^[A-Za-z]+$" minlength="3"
+                maxlength="25" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="lastName">Last Name</label>
+            <input class="form-control" type="text" id="lastName" name="lastName" pattern="^[A-Za-z]+$" minlength="3"
+                maxlength="25" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+        <div class="mb-3">
             <label class="form-label" for="username">Username</label>
-            <input class="form-control" type="text" id="username" name="username" required>
+            <input class="form-control" type="text" id="username" name="username" pattern="^[A-Za-z0-9]+$" minlength="8"
+                maxlength="15" required>
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -20,7 +37,9 @@
         </div>
         <div class="mb-3">
             <label class="form-label" for="password">Password</label>
-            <input class="form-control" type="password" id="password" name="password" required>
+            <input class="form-control" type="password" id="password" name="password"
+                pattern="(?=.*[A-Z])(?=.*[!@#$&*]).{8,}"
+                title="Must contain at least one uppercase letter and one special character" required>
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -45,13 +64,76 @@
             </div>
         </div>
 
+
+
+
         <div class="mb-3">
-            <label class="form-label" for="address">Address</label>
-            <input class="form-control" type="text" id="address" name="address" required>
+            <label class="form-label" for="addressLine1">Address Line 1</label>
+            <input class="form-control" type="text" id="addressLine1" name="address[line1]" required>
             <div class="valid-feedback">
                 Looks good!
             </div>
         </div>
+        <div class="mb-3">
+            <label class="form-label" for="addressLine2">Address Line 2</label>
+            <input class="form-control" type="text" id="addressLine2" name="address[line2]">
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="city">City</label>
+            <input class="form-control" type="text" id="city" name="address[city]" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="state">State</label>
+            <input class="form-control" type="text" id="state" name="address[state]" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="zip">Zip Code</label>
+            <input class="form-control" type="text" id="zip" name="address[zip]" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="country">Country</label>
+            <input class="form-control" type="text" id="country" name="address[country]" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         <div class="mb-3">
             <label class="form-label" for="phoneNumber">Phone Number</label>

@@ -31,11 +31,13 @@ const Joi = BaseJoi.extend(extension)
 
 
 module.exports.messageSchema = Joi.object({
-    email: Joi.string().email().required(),
-    name: Joi.string().required(),
-    message: Joi.string().required(),
+    email: Joi.string().email().required().escapeHTML(),
+    name: Joi.string().required().pattern(/^[A-Za-z\s]+$/).min(3).max(45).escapeHTML(),
+    message: Joi.string().required().max(500).escapeHTML(),
     isRead: Joi.boolean().allow(null)
 });
+
+
 
 
 module.exports.loanReqSchema = Joi.object({
@@ -89,12 +91,27 @@ module.exports.accountSchema = Joi.object({
 
 
 module.exports.userSchema = Joi.object({
-    username: Joi.string().required().escapeHTML(),
+    firstName: Joi.string().pattern(/^[A-Za-z]+$/).required().min(3).max(25).escapeHTML(),
+    lastName: Joi.string().pattern(/^[A-Za-z]+$/).required().min(3).max(25).escapeHTML(),
+    username: Joi.string().min(8).max(15).alphanum().custom((value, helpers) => {
+        if (/^(.)\1+$/.test(value)) {
+            return helpers.error('any.invalid');
+        }
+        return value;
+    }, 'Non-repetitive character validation')
+        .required().alphanum().escapeHTML(),
     email: Joi.string().email().required().escapeHTML(),
-    password: Joi.string().required().escapeHTML(),
+    password: Joi.string().pattern(new RegExp('(?=.*[A-Z])(?=.*[!@#$&*])')).required().escapeHTML(),
     grossIncome: Joi.string().required(),
     ssn: Joi.string().pattern(new RegExp('^[0-9]{3}-[0-9]{2}-[0-9]{4}$')).required(),
-    address: Joi.string().required().escapeHTML(),
+    address: Joi.object({
+        line1: Joi.string().required().escapeHTML(),
+        line2: Joi.string().allow('', null).escapeHTML(),
+        city: Joi.string().required().escapeHTML(),
+        state: Joi.string().required().escapeHTML(),
+        zip: Joi.string().required().escapeHTML(),
+        country: Joi.string().required().escapeHTML()
+    }).required(),
     phoneNumber: Joi.string().required().escapeHTML(),
     validId: Joi.string().required()
 }).required();

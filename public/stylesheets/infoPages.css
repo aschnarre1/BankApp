@@ -1,10 +1,7 @@
 body {
     background: linear-gradient(to right, #007bff, #000);
-    /* Blue to black gradient */
     color: white;
-    /* White text color */
     font-family: 'Arial', sans-serif;
-    /* Default font */
 }
 
 
@@ -70,7 +67,6 @@ body {
     padding: 20px;
     margin: 10px;
     width: calc(20% - 20px);
-    /* Adjust width as necessary */
     text-align: center;
 }
 
@@ -114,21 +110,18 @@ body {
 @media (max-width: 1024px) {
     .loan-info {
         width: calc(33.333% - 20px);
-        /* 3 per row */
     }
 }
 
 @media (max-width: 768px) {
     .loan-info {
         width: calc(50% - 20px);
-        /* 2 per row */
     }
 }
 
 @media (max-width: 480px) {
     .loan-info {
         width: 100%;
-        /* 1 per row */
     }
 }
 
@@ -138,14 +131,11 @@ body {
         display: flex;
         flex-direction: column;
         align-items: center;
-        /* Center align the loan-info cards */
     }
 
     .loan-info {
         width: 80%;
-        /* Adjust the width to your preference */
         margin: 10px 0;
-        /* Add vertical margin */
     }
 }
 

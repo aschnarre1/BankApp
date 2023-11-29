@@ -3,7 +3,7 @@ const router = express.Router();
 const accounts = require('../controllers/accountRoute');
 const catchAsync = require('../utils/catchAsync');
 const { accountSchema } = require('../schemas.js');
-const { isLoggedIn, isHolder, validateAccount, isAdmin } = require('../middleware');
+const { isLoggedIn, isHolder, validateAccount, isAdmin, validateMessage } = require('../middleware');
 
 const ExpressError = require('../utils/ExpressError');
 const Account = require('../models/accounts');
@@ -21,7 +21,7 @@ router.get('/transfer', isLoggedIn, catchAsync(accounts.transfer));
 router.get('/requestStatus', isLoggedIn, catchAsync(accounts.renderUserRequests));
 
 
-router.post('/send-message', accounts.sendMessage);
+router.post('/send-message', validateMessage, accounts.sendMessage);
 
 
 router.post('/processTransfer', isLoggedIn, accounts.processTransfer);

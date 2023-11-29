@@ -1,10 +1,7 @@
 body {
     background: linear-gradient(to right, #007bff, #000);
-    /* Blue to black gradient */
     color: white;
-    /* White text color */
     font-family: 'Arial', sans-serif;
-    /* Default font */
 }
 
 

@@ -1,5 +1,4 @@
-const { accountSchema } = require('./schemas.js');
-const { userSchema } = require('./schemas.js');
+const { accountSchema, userSchema, messageSchema, loanReqSchema, creditCardReqSchema, requestSchema } = require('./schemas.js');
 const ExpressError = require('./utils/ExpressError');
 const { Account } = require('./models/accounts');
 const User = require("./models/user.js")
@@ -34,8 +33,16 @@ module.exports.validateUser = (req, res, next) => {
     }
     const { error } = userSchema.validate(req.body);
     if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
+        error.details.forEach(err => {
+            switch (err.context.key) {
+                case 'username':
+                    req.flash('error', 'Invalid username, username must be 8-15 characters and not be a repeating letter');
+                    break;
+                default:
+                    req.flash('error', 'Invalid input: ');
+            }
+        })
+        return res.redirect('/register');
     } else {
         next();
     }
@@ -68,7 +75,7 @@ module.exports.isUser = async (req, res, next) => {
         return res.redirect('/accountViews/myAccounts');
     }
 
-    next(); // User is the holder, proceed with the request
+    next();
 }
 
 
@@ -91,3 +98,14 @@ module.exports.isAdmin = async (req, res, next) => {
     req.flash('error', 'Permission denied');
     res.redirect('/');
 }
+
+
+module.exports.validateMessage = (req, res, next) => {
+    const { error } = messageSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',');
+        req.flash('error', "Must have a valid name and not exceed a 500 letter message");
+        return res.redirect('/contactUs');
+    }
+    next();
+};

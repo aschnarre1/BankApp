@@ -11,13 +11,21 @@
             </div>
             <div class="card-body">
                 <h5 class="card-title">
+                    First Name: <%= user.firstName %>
+                </h5>
+                <h5 class="card-title">
+                    Last Name: <%= user.lastName %>
+                </h5>
+                <h5 class="card-title">
                     Email: <%= user.email %>
                 </h5>
                 <h5 class="card-title">
                     Gross Income: <%= user.grossIncome %>
                 </h5>
                 <h5 class="card-title">
-                    Address: <%= user.address %>
+                    Address: <%= user.address.line1 %>
+                        <%= user.address.line2 ? ', ' + user.address.line2 : '' %>, <%= user.address.city %>
+                                <%= user.address.state %>, <%= user.address.zip %>, <%= user.address.country %>
                 </h5>
                 <h5 class="card-title">
                     Phone Number: <%= user.phoneNumber %>

@@ -1,11 +1,9 @@
-/* Body and Home Container for General Responsiveness */
 body,
 .home-container {
     padding: 0px;
     margin: 0;
 }
 
-/* General styles for the home container */
 .home-container {
     text-align: center;
     display: flex;
@@ -13,14 +11,13 @@ body,
     align-items: center;
 }
 
-/* Background styles */
 body {
     background: linear-gradient(to right, #007bff, #000);
     color: white;
     font-family: 'Arial', sans-serif;
 }
 
-/* Styles for the welcome and logo section */
+
 .welcome-logo-section {
     display: flex;
     justify-content: space-between;
@@ -28,33 +25,32 @@ body {
     margin-bottom: 50px;
 }
 
-/* Styles for the welcome message */
+
 .welcome-message {
     flex: 1;
     margin-right: 10%;
 }
 
-/* Styles for the logo container */
+
 .logo-container {
     flex: 1;
     text-align: right;
 }
 
-/* Styles for the logo image */
+
 .home-logo {
     max-width: 600px;
     width: 100%;
     height: auto;
 }
 
-/* Styles for the features section */
+
 .features {
     display: flex;
     justify-content: space-around;
     margin-top: 50px;
 }
 
-/* Styles for each individual feature */
 .feature {
     flex: 1;
     padding: 20px;
@@ -64,7 +60,7 @@ body {
     border-radius: 10px;
 }
 
-/* Styles for the call-to-action section */
+
 .call-to-action {
     display: flex;
     justify-content: center;
@@ -73,7 +69,7 @@ body {
     margin-top: 50px;
 }
 
-/* Styles for primary buttons */
+
 .btn-success {
     color: white;
     padding: 10px 20px;
@@ -86,7 +82,7 @@ body {
     background-color: #005f24;
 }
 
-/* Styles for the header within the home container */
+
 .home-header h1,
 .feature h2 {
     font-size: 3em;
@@ -99,10 +95,9 @@ body {
     color: white;
 }
 
-/* Responsive Adjustments for Smaller Screens */
 @media (max-width: 768px) {
 
-    /* Adjust Logo and Welcome Message Layout */
+
     .logo-container {
         display: none;
     }
@@ -113,7 +108,7 @@ body {
         width: 100%;
     }
 
-    /* Responsive Features */
+
     .features {
         flex-direction: column;
         align-items: center;
@@ -124,12 +119,11 @@ body {
         width: 100%;
     }
 
-    /* Call to Action Adaptation */
+
     .call-to-action {
         width: 100%;
     }
 
-    /* Adaptive Font Sizes */
     .home-header h1 {
         font-size: 2em;
     }

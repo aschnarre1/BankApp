@@ -6,7 +6,7 @@
 
         <div class="mb-3">
             <label for="deposit" class="form-label">Deposit Amount: </label>
-            <input type="text" class="form-control" id="deposit" name="account[deposit]" required>
+            <input type="text" class="form-control" id="deposit" name="account[deposit]" placeholder="$0.00" required>
             <div class="valid-feedback"> Looks Good!</div>
         </div>
 
@@ -46,10 +46,10 @@
     <script>
         document.getElementById('deposit').addEventListener('input', function (event) {
             let input = event.target.value;
-            input = input.replace(/[^0-9]/g, ''); // Remove any non-numeric characters
-            if (input.length === 0) return; // If the input is empty, do nothing
-            input = parseInt(input); // Convert the string to an integer
-            event.target.value = (input / 100).toFixed(2); // Convert to decimal and fix to 2 decimal places
+            input = input.replace(/[^0-9]/g, '');
+            if (input.length === 0) return;
+            input = parseInt(input);
+            event.target.value = (input / 100).toFixed(2);
         });
     </script>
 

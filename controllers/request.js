@@ -20,7 +20,7 @@ module.exports.createRequest = async (req, res) => {
         const depositInCents = Math.round(req.body.account.deposit * 100);
 
         const request = new UserRequest({
-            amountInCents: depositInCents,
+            amountInCents: depositInCents.trim(),
             user: req.user._id,
             accountFrom: {
                 id: accountId,
@@ -59,7 +59,7 @@ module.exports.approveRequest = async (req, res) => {
         if (account) {
 
             const toTransaction = {
-                amountInCents: request.amountInCents,
+                amountInCents: request.amountInCents.trim(),
                 type: "Deposit",
                 date: new Date()
             };
@@ -72,7 +72,6 @@ module.exports.approveRequest = async (req, res) => {
             return res.redirect('/accountViews/adminRequests');
         }
 
-        req.flash('success', 'Request approved');
         res.redirect('/accountViews/adminRequests');
     } catch (error) {
         console.error(error);
@@ -94,7 +93,6 @@ module.exports.denyRequest = async (req, res) => {
         request.approved = false;
         await request.save();
 
-        req.flash('success', 'Request denied');
         res.redirect('/accountViews/adminRequests');
     } catch (error) {
         console.error(error);
@@ -127,7 +125,7 @@ module.exports.creditCardRequests = async (req, res) => {
             creditCardInfo: {
                 creditCardType: creditCardType,
                 employmentStatus: employmentStatus,
-                grossIncome: grossIncome
+                grossIncome: grossIncome.trim()
             }
 
         });
@@ -163,7 +161,7 @@ module.exports.loanRequests = async (req, res) => {
 
         const request = new UserRequest({
             user: req.user._id,
-            amountInCents: loanAmountInCents,
+            amountInCents: loanAmountInCents.trim(),
             accountFrom: {
                 id: accountId,
                 accountType: accountType
@@ -230,7 +228,6 @@ module.exports.cardApproved = async (req, res) => {
         user.numOfAccounts += 1;
         user.accountIds.push(account._id);
         await user.save();
-        req.flash('success', 'Successfully made a new Account!');
         res.redirect(`/accountViews/adminRequests`)
 
     } catch (error) {
@@ -254,8 +251,8 @@ module.exports.loanApproved = async (req, res) => {
             return res.redirect('/accountViews/adminRequests');
         }
 
-        // Find the bank's account by its custom account ID
-        const bankAccountId = 'BANK-001'; // Bank's custom account ID
+
+        const bankAccountId = 'BANK-001';
         const bankAccount = await Account.findOne({ accountId: bankAccountId });
 
         if (!bankAccount || bankAccount.totalInCents < request.amountInCents) {
@@ -263,11 +260,11 @@ module.exports.loanApproved = async (req, res) => {
             return res.redirect('/accountViews/adminRequests');
         }
 
-        // Deduct the loan amount from the bank's account
+
         bankAccount.totalInCents -= request.amountInCents;
         await bankAccount.save();
 
-        // Create a new loan account for the user
+
         const userLoanAccount = new Account({
             holder: request.user._id,
             accountId: uuidv4(),
@@ -284,24 +281,22 @@ module.exports.loanApproved = async (req, res) => {
         await userLoanAccount.save();
 
         const bankTransaction = {
-            amountInCents: -request.amountInCents, // Negative because it's a withdrawal
+            amountInCents: -request.amountInCents,
             type: 'Withdrawal',
-            date: new Date() // Automatically set to current date
+            date: new Date()
         };
         bankAccount.transactions.push(bankTransaction);
         await bankAccount.save();
 
-        // Update the user's account information
         const user = await User.findById(request.user._id);
         user.numOfAccounts += 1;
         user.accountIds.push(userLoanAccount._id);
         await user.save();
 
-        // Mark the request as approved
+
         request.approved = true;
         await request.save();
 
-        req.flash('success', 'Successfully approved the loan request!');
         res.redirect(`/accountViews/adminRequests`);
 
     } catch (error) {
@@ -318,7 +313,6 @@ module.exports.deleteRequest = async (req, res) => {
     try {
         const { id } = req.params;
         await Request.findByIdAndDelete(id);
-        req.flash('success', 'Request deleted');
         res.redirect('/requests');
     } catch (error) {
         console.error(error);
