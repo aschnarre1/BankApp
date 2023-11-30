@@ -1,0 +1,30 @@
+<% layout("layouts/boilierplate")%>
+    <link rel="stylesheet" href="/stylesheets/allBank.css">
+
+
+
+    <h1>Create a New Account</h1>
+    <form action="/accountViews" method="post" novalidate class="validated-form">
+        <div class="mb-3">
+            <label for="accountType">Account Type:</label>
+            <select class="form-select" aria-label="Default select example" name="account[accountType]" id="accountType"
+                required>
+                <option value="" disabled selected>-Please Select-</option>
+                <option value="Savings">Savings</option>
+                <option value="Checkings">Checkings</option>
+            </select>
+            <div class="valid-feedback"> Looks Good!</div>
+        </div>
+
+
+        <input type="hidden" name="account[holder]" value="<%= userId %>">
+
+
+        <% let notBlocked=true; for(let account of accounts) { if(account.isFrozen) { notBlocked=false; break; } } %>
+
+            <% if(notBlocked) {%>
+                <button type="submit" class="btn btn-success">Create Account</button>
+                <% } else {%>
+                    <p>Can not create a new account while one of your accounts is frozen</p>
+                    <% } %>
+    </form>

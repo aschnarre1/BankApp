@@ -16,28 +16,28 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-link" href="/">Home</a>
-                <a class="nav-link" href="/creditCardInfo">Credit Cards</a>
-                <a class="nav-link" href="/loanInfo">Loans</a>
-                <a class="nav-link" href="/aboutUs">About Us</a>
-                <a class="nav-link" href="/contactUs">Contact Us</a>
+                <a class="nav-link" href="/" id="homeTab">Home</a>
+                <a class="nav-link" href="/creditCardInfo" id="creditCardTab">Credit Cards</a>
+                <a class="nav-link" href="/loanInfo" id="loanTab">Loans</a>
+                <a class="nav-link" href="/aboutUs" id="aboutUsTab">About Us</a>
+                <a class="nav-link" href="/contactUs" id="contactUsTab">Contact Us</a>
             </div>
             <div class="navbar-nav ms-auto">
                 <% if(!currentUser) { %>
-                    <a class="nav-link" href="/login">Login</a>
-                    <a class="nav-link" href="/register">Register</a>
+                    <a class="nav-link" href="/login" id="loginTab">Login</a>
+                    <a class="nav-link" href="/register" id="registerTab">Register</a>
                     <% } else if(currentUser.username=="admin" ) { %>
-                        <a class="nav-link" href="/accountViews/adminUsers">All Users</a>
-                        <a class="nav-link" href="/accountViews/adminView">All Accounts</a>
+                        <a class="nav-link" href="/accountViews/adminUsers" id="allUsersTab">All Users</a>
+                        <a class="nav-link" href="/accountViews/adminView" id="allAccountsTab">All Accounts</a>
 
 
 
-                        <a class="nav-link" href="/accountViews/adminRequests">
+                        <a class="nav-link" href="/accountViews/adminRequests" id="adminRequestsTab">
                             Requests <span class="badge bg-danger admin-requests-count" style="display:none;"></span>
                         </a>
 
 
-                        <a class="nav-link" href="/accountViews/adminMessages">
+                        <a class="nav-link" href="/accountViews/adminMessages" id="adminMessagesTab">
                             Messages <span class="badge bg-danger admin-messages-count" style="display:none;"></span>
                         </a>
 
@@ -47,10 +47,11 @@
 
                         <a class="nav-link" href="/logout">Logout</a>
                         <% } else { %>
-                            <a class="nav-link" href="/accountViews/myAccounts">My Accounts</a>
-                            <a class="nav-link" href="/accountViews/newAccount">New Account</a>
-                            <a class="nav-link" href="/accountViews/transfer">Transfer/Pay</a>
-                            <a class="nav-link" href="/accountViews/requestStatus">Request's Status</a>
+                            <a class="nav-link" href="/accountViews/myAccounts" id="myAccountTab">My Accounts</a>
+                            <a class="nav-link" href="/accountViews/newAccount" id="newAccountTab">New Account</a>
+                            <a class="nav-link" href="/accountViews/transfer" id="transferTab">Transfer/Pay</a>
+                            <a class="nav-link" href="/accountViews/requestStatus" id="requestStatusTab">Request's
+                                Status</a>
                             <a class="nav-link" href="/logout">Logout</a>
                             <% } %>
             </div>
@@ -103,5 +104,44 @@
         });
     </script>
 
-
     <% } %>
+
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const currentPath = window.location.pathname;
+
+                if (currentPath === '/') {
+                    document.getElementById('homeTab').style.display = 'none';
+                } else if (currentPath === '/creditCardInfo') {
+                    document.getElementById('creditCardTab').style.display = 'none';
+                } else if (currentPath === '/loanInfo') {
+                    document.getElementById('loanTab').style.display = 'none';
+                } else if (currentPath === '/aboutUs') {
+                    document.getElementById('aboutUsTab').style.display = 'none';
+                } else if (currentPath === '/contactUs') {
+                    document.getElementById('contactUsTab').style.display = 'none';
+                } else if (currentPath === '/login') {
+                    document.getElementById('loginTab').style.display = 'none';
+                } else if (currentPath === '/register') {
+                    document.getElementById('registerTab').style.display = 'none';
+                } else if (currentPath === '/accountViews/adminUsers') {
+                    document.getElementById('allUsersTab').style.display = 'none';
+                } else if (currentPath === '/accountViews/adminView') {
+                    document.getElementById('allAccountsTab').style.display = 'none';
+                } else if (currentPath === '/accountViews/adminRequests') {
+                    document.getElementById('adminRequestsTab').style.display = 'none';
+                } else if (currentPath === '/accountViews/adminMessages') {
+                    document.getElementById('adminMessagesTab').style.display = 'none';
+                } else if (currentPath === '/accountViews/myAccounts') {
+                    document.getElementById('myAccountTab').style.display = 'none';
+                } else if (currentPath === '/accountViews/newAccount') {
+                    document.getElementById('newAccountTab').style.display = 'none';
+                } else if (currentPath === '/accountViews/transfer') {
+                    document.getElementById('transferTab').style.display = 'none';
+                } else if (currentPath === '/accountViews/requestStatus') {
+                    document.getElementById('requestStatusTab').style.display = 'none';
+                }
+
+            });
+        </script>

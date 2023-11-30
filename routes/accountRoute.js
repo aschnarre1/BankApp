@@ -9,8 +9,6 @@ const ExpressError = require('../utils/ExpressError');
 const Account = require('../models/accounts');
 
 
-
-
 router.route("/")
     .get(catchAsync(accounts.index))
     .post(isLoggedIn, validateAccount, catchAsync(accounts.createAccount))
@@ -19,6 +17,18 @@ router.get('/newAccount', isLoggedIn, accounts.renderNewForm)
 router.get('/myAccounts', isLoggedIn, catchAsync(accounts.myAccounts));
 router.get('/transfer', isLoggedIn, catchAsync(accounts.transfer));
 router.get('/requestStatus', isLoggedIn, catchAsync(accounts.renderUserRequests));
+
+
+
+router.get('/createAccount', isLoggedIn, catchAsync(accounts.renderCreateAccount));
+router.get('/requestCard', isLoggedIn, catchAsync(accounts.renderRequestCard));
+router.get('/requestLoan', isLoggedIn, catchAsync(accounts.renderRequestLoan));
+
+
+router.get('/transferFriend', isLoggedIn, catchAsync(accounts.renderTransferFriend));
+router.get('/transferAccount', isLoggedIn, catchAsync(accounts.renderTransferAccount));
+router.get('/payOffLoan', isLoggedIn, catchAsync(accounts.renderPayOffLoan));
+
 
 
 router.post('/send-message', validateMessage, accounts.sendMessage);

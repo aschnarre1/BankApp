@@ -94,7 +94,7 @@ module.exports.register = async (req, res, next) => {
         }
 
 
-        const formattedUsername = username.toLowerCase().trim();
+        const formattedUsername = username.trim();
         const existingUsername = await User.findOne({ username: formattedUsername });
         if (existingUsername) {
             req.flash('error', 'Username already exists.');

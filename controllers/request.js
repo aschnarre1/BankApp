@@ -8,7 +8,6 @@ const { v4: uuidv4 } = require('uuid');
 module.exports.createRequest = async (req, res) => {
     try {
         const { deposit, accountFrom: accountId } = req.body.account;
-
         const account = await Account.findById(accountId);
         if (!account) {
             req.flash('error', 'Account not found');
@@ -16,18 +15,37 @@ module.exports.createRequest = async (req, res) => {
         }
 
         const accountType = account.accountType;
+        const depositInCents = Math.round(deposit * 100);
 
-        const depositInCents = Math.round(req.body.account.deposit * 100);
+        const frontImage = req.files.frontImage ? {
+            url: req.files.frontImage[0].path,
+            filename: req.files.frontImage[0].filename
+        } : null;
+
+
+        console.log("FrontImage URL " + frontImage.url);
+
+        const backImage = req.files.backImage ? {
+            url: req.files.backImage[0].path,
+            filename: req.files.backImage[0].filename
+        } : null;
+
 
         const request = new UserRequest({
-            amountInCents: depositInCents.trim(),
+            amountInCents: depositInCents,
             user: req.user._id,
             accountFrom: {
                 id: accountId,
                 accountType: accountType
+            },
+            images: {
+                frontImage: frontImage,
+                backImage: backImage
             }
         });
-        request.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
+
+        console.log("Request " + request);
+
         await request.save();
         req.flash('success', 'Request sent to admin for approval');
         res.redirect('/accountViews/myAccounts');
@@ -59,7 +77,7 @@ module.exports.approveRequest = async (req, res) => {
         if (account) {
 
             const toTransaction = {
-                amountInCents: request.amountInCents.trim(),
+                amountInCents: request.amountInCents,
                 type: "Deposit",
                 date: new Date()
             };
@@ -125,7 +143,7 @@ module.exports.creditCardRequests = async (req, res) => {
             creditCardInfo: {
                 creditCardType: creditCardType,
                 employmentStatus: employmentStatus,
-                grossIncome: grossIncome.trim()
+                grossIncome: grossIncome
             }
 
         });
@@ -161,7 +179,7 @@ module.exports.loanRequests = async (req, res) => {
 
         const request = new UserRequest({
             user: req.user._id,
-            amountInCents: loanAmountInCents.trim(),
+            amountInCents: loanAmountInCents,
             accountFrom: {
                 id: accountId,
                 accountType: accountType

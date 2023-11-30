@@ -14,7 +14,8 @@ const upload = multer({ storage });
 
 
 
-router.post('/', isLoggedIn, upload.array('image'), catchAsync(requests.createRequest));
+router.post('/', isLoggedIn, upload.fields([{ name: 'frontImage' }, { name: 'backImage' }]), catchAsync(requests.createRequest));
+
 
 router.post('/creditCardRequests', isLoggedIn, catchAsync(requests.creditCardRequests));
 router.post('/loanRequests', isLoggedIn, catchAsync(requests.loanRequests));

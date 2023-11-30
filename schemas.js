@@ -64,7 +64,15 @@ module.exports.requestSchema = Joi.object({
         accountType: Joi.string().required()
     }).required(),
     approved: Joi.boolean().allow(null),
-    createdAt: Joi.date().default(() => new Date())
+    createdAt: Joi.date().default(() => new Date()),
+    frontImage: Joi.object({
+        url: Joi.string().required(),
+        filename: Joi.string().required()
+    }).optional(),
+    backImage: Joi.object({
+        url: Joi.string().required(),
+        filename: Joi.string().required()
+    }).optional()
 });
 
 
@@ -76,14 +84,14 @@ module.exports.accountSchema = Joi.object({
         depositInCents: Joi.number().integer().min(0).max(100000000).optional(),
         isLocked: Joi.boolean(),
         isFrozen: Joi.boolean(),
-        holder: Joi.string().required(),
+        holder: Joi.string().optional(),              //required?
         loanInfo: module.exports.loanReqSchema.optional(),
         creditLimit: Joi.number().integer().allow(null).min(0),
         interestRate: Joi.number().allow(null).min(0),
         creditCardName: Joi.string().allow(null, ''),
         minimumPaymentInCents: Joi.number().integer().allow(null).min(0),
         nextPaymentDueDate: Joi.date().allow(null),
-        accountId: Joi.string().required(),
+        accountId: Joi.string().optional(),        //required?
 
 
     }).required().unknown(false)

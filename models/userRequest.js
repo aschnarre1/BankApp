@@ -51,7 +51,10 @@ const opts = { toJSON: { virtuals: true } };
 const requestSchema = new Schema({
     creditCardInfo: creditCardReq,
     loanInfo: loanRequest,
-    images: [ImageSchema],
+    images: {
+        frontImage: ImageSchema,
+        backImage: ImageSchema
+    },
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User',

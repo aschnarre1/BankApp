@@ -1,0 +1,84 @@
+<% layout("layouts/boilierplate")%>
+    <link rel="stylesheet" href="/stylesheets/allBank.css">
+    <h1>Transfer Money Within Profile</h1>
+
+
+    <form action="/accountViews/processTransferWithin" method="post" novalidate class="validated-form">
+        <div class="mb-3">
+
+            <label for="TransferFrom">Transfer From:</label>
+            <select class="form-select" aria-label="Default select example" name="transferFromAccount" id="TransferFrom"
+                required>
+                <% for (let account of accounts){%>
+                    <% if(account.accountType.trim().toLowerCase()!="loan" &&
+                        account.accountType.trim().toLowerCase()!="credit" ) {%>
+                        <option value="<%- account._id %>">
+                            <% const totalInDollars=(account.totalInCents / 100).toFixed(2); %>
+                                <%= account.accountType %>: $<%=totalInDollars %>
+                        </option>
+                        <%}%>
+                            <% } %>
+            </select>
+
+            <label for="total" class="form-label">Amount: </label>
+            <input type="text" class="form-control" id="total" name="account[total]" placeholder="$0.00" required>
+
+
+
+
+            <label for="TransferTo">Transfer To:</label>
+            <select class="form-select" aria-label="Default select example" name="transferToAccount" id="TransferTo"
+                required>
+                <% for (let account of accounts){%>
+                    <% if(account.accountType.trim().toLowerCase()!="loan" &&
+                        account.accountType.trim().toLowerCase()!="credit" ) {%>
+                        <option value="<%- account._id %>">
+                            <% const totalInDollars=(account.totalInCents / 100).toFixed(2); %>
+                                <%= account.accountType %>: $<%=totalInDollars %>
+                        </option>
+                        <%}%>
+                            <% } %>
+            </select>
+
+            <div class="valid-feedback"> Looks Good!</div>
+        </div>
+
+
+
+        <% let transferBlockedAgain=true; for(let account of accounts) { if(account.isFrozen || account.isLocked) {
+            transferBlockedAgain=false; break; } } %>
+
+            <% if(transferBlockedAgain) { %>
+                <button type="submit" class="btn btn-success">Transfer Money</button>
+                <% } else { %>
+                    <p>Account is locked or Frozen. You are unable to transfer money</p>
+                    <% } %>
+    </form>
+
+
+
+    <script>
+        function preventNonNumericKeystrokes(event) {
+            if (!event.key.match(/[0-9]/) && event.key !== 'Backspace' && event.key !== 'Tab' && event.key !== 'Enter' && event.key !== 'ArrowLeft' && event.key !== 'ArrowRight' && event.key !== 'Delete') {
+                event.preventDefault();
+            }
+        }
+
+        function formatNumericInput(event) {
+            let input = event.target.value;
+            input = input.replace(/[^0-9]/g, '');
+            if (input.length === 0) return;
+            input = parseInt(input);
+            event.target.value = (input / 100).toFixed(2);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            ['totalInCents', 'total', 'payoutInCents'].forEach(function (id) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('keydown', preventNonNumericKeystrokes);
+                    element.addEventListener('input', formatNumericInput);
+                }
+            });
+        });
+    </script>

@@ -1,0 +1,47 @@
+<% layout("layouts/boilierplate")%>
+    <link rel="stylesheet" href="/stylesheets/allBank.css">
+
+
+    <form action="/accountViews/<%= accounts[0]._id %>/requests/creditCardRequests" method="post" novalidate
+        class="validated-form">
+        <input type="hidden" name="accountFrom" value="<%= accounts[0]._id %>">
+
+        <div class="mb-3">
+            <h1>Request Credit Card Approval</h1>
+
+            <label for="cardType">Which card would you like to apply for?</label>
+            <select class="form-select" aria-label="Default select example" name="account[cardType]" id="cardType"
+                required>
+                <option value="" disabled selected>-Please Select-</option>
+                <option value="Saphire">Saphire</option>
+                <option value="Ruby">Ruby</option>
+                <option value="Emerald">Emerald</option>
+            </select>
+
+
+
+            <label for="employmentStatus">Employment Status:</label>
+            <select class="form-select" aria-label="Default select example" name="account[employmentStatus]"
+                id="employmentStatus" required>
+                <option value="" disabled selected>-Please Select-</option>
+                <option value="Unemployed">Unemployed</option>
+                <option value="FullTime">Working Full time</option>
+                <option value="PartTime">Working Part time</option>
+            </select>
+
+            <label for="grossIncomeCredit">Total Gross Income: </label>
+            <input type="text" class="form-control" id="grossIncomeCredit" name="account[grossIncome]" placeholder="$0"
+                required>
+
+
+            <button type="submit" class="btn btn-success">Request</button>
+        </div>
+    </form>
+
+    <script>
+        document.getElementById('grossIncomeCredit').addEventListener('keydown', function (event) {
+            if (!event.key.match(/[0-9]/) && event.key !== 'Backspace' && event.key !== 'Tab' && event.key !== 'Enter' && event.key !== 'ArrowLeft' && event.key !== 'ArrowRight' && event.key !== 'Delete') {
+                event.preventDefault();
+            }
+        });
+    </script>

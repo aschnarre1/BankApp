@@ -4,7 +4,7 @@
     <div class="container mt-4">
         <div class="card">
             <div class="card-header">
-                Account Details
+                Account Details ending in XXXXX<%= account._id.toString().slice(-4) %>
             </div>
             <div class="card-body">
                 <% if(account.isLocked) { %>
@@ -21,7 +21,7 @@
                             <h5 class="card-title">Account Type: <%= account.accountType %>
                             </h5>
                             <% const totalInDollars=(account.totalInCents / 100).toFixed(2); %>
-                                <p class="card-text">Total: $<%= totalInDollars %> -<%= account.holder.username%>
+                                <p class="card-text">Total: $<%= totalInDollars %>
                                 </p>
                                 <% if(account.accountType.trim().toLowerCase()==="credit" ) {%>
                                     <p class="card-text">Limit: $<%= account.creditLimit %>
@@ -80,20 +80,28 @@
     </div>
 
     <h5>Account history</h5>
-    <% for (let transaction of account.transactions) { %>
-        <% let transColor=transaction.type.toLowerCase(); %>
-            <div class="card" id="<%= transColor %>">
-                <div class="card-header">
+    <% if (account.transactions.length===0) { %>
+        <p>-- There are is no account activity at this time --</p>
+        <% } else { %>
+            <% for (let transaction of account.transactions) { %>
+                <% let transColor=transaction.type.toLowerCase(); %>
+                    <div class="card" id="<%= transColor %>">
+                        <div class="card-header">
 
-                    <% const transactionInDollars=(transaction.amountInCents / 100).toFixed(2); %>
-                        Transaction Amount: <%= transactionInDollars %>
-                </div>
-                <div class="card-body">
-                    <p class="card-text">
-                        Transaction type: <%= transaction.type %>
-                    </p>
-                    <p class="card-text">Transaction date: <%= transaction.date %>
-                    </p>
-                </div>
-            </div>
-            <% } %>
+                            <% const transactionInDollars=(transaction.amountInCents / 100).toFixed(2); %>
+                                Transaction Amount: <%= transactionInDollars %>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                Type: <%= transaction.type %>
+                            </p>
+                            <p class="card-text">
+                                Transaction date:
+                                <% let formattedDate=transaction.date.toString().split(' GMT')[0]; %>
+                                    <%= formattedDate %>
+                            </p>
+                        </div>
+                    </div>
+                    <% } %>
+
+                        <%}%>

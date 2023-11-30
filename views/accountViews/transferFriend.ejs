@@ -1,0 +1,69 @@
+<% layout("layouts/boilierplate")%>
+    <link rel="stylesheet" href="/stylesheets/allBank.css">
+    <h1>Transfer Money To Friend</h1>
+
+
+    <form action="/accountViews/processTransfer" method="post" novalidate class="validated-form">
+        <div class="mb-3">
+
+            <label for="TransferFrom">Transfer From:</label>
+            <select class="form-select" aria-label="Default select example" name="transferFromAccount" id="TransferFrom"
+                required>
+                <% for (let account of accounts){%>
+                    <% if(account.accountType.trim().toLowerCase()!="loan" ) {%>
+                        <option value="<%- account._id %>">
+                            <% const totalInDollars=(account.totalInCents / 100).toFixed(2); %>
+                                <%= account.accountType %>: $<%=totalInDollars %>
+                        </option>
+                        <% } %>
+                            <% } %>
+            </select>
+
+            <label for="totalInCents" class="form-label">Amount: </label>
+            <input type="text" class="form-control" id="totalInCents" name="account[totalInCents]" placeholder="$0.00"
+                required>
+
+            <label for="TransferTo" class="form-label">To (username): </label>
+            <input type="text" class="form-control" id="TransferTo" name="transferToAccount" required>
+
+            <div class="valid-feedback"> Looks Good!</div>
+        </div>
+
+
+        <% let transferBlocked=true; for(let account of accounts) { if(account.isFrozen || account.isLocked) {
+            transferBlocked=false; break; } } %>
+
+            <% if(transferBlocked) { %>
+                <button type="submit" class="btn btn-success">Transfer Money</button>
+                <% } else { %>
+                    <p>Account is locked or Frozen. You are unable to transfer money</p>
+                    <% } %>
+    </form>
+
+
+
+    <script>
+        function preventNonNumericKeystrokes(event) {
+            if (!event.key.match(/[0-9]/) && event.key !== 'Backspace' && event.key !== 'Tab' && event.key !== 'Enter' && event.key !== 'ArrowLeft' && event.key !== 'ArrowRight' && event.key !== 'Delete') {
+                event.preventDefault();
+            }
+        }
+
+        function formatNumericInput(event) {
+            let input = event.target.value;
+            input = input.replace(/[^0-9]/g, '');
+            if (input.length === 0) return;
+            input = parseInt(input);
+            event.target.value = (input / 100).toFixed(2);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            ['totalInCents', 'total', 'payoutInCents'].forEach(function (id) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('keydown', preventNonNumericKeystrokes);
+                    element.addEventListener('input', formatNumericInput);
+                }
+            });
+        });
+    </script>

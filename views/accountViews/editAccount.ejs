@@ -4,6 +4,9 @@
     <form action="/accountViews/<%= account._id %>/requests" method="post" novalidate class="validated-form"
         enctype="multipart/form-data">
 
+        <h4>Account Details ending in XXXXX<%= account._id.toString().slice(-4) %>
+        </h4>
+
         <div class="mb-3">
             <label for="deposit" class="form-label">Deposit Amount: </label>
             <input type="text" class="form-control" id="deposit" name="account[deposit]" placeholder="$0.00" required>
@@ -11,22 +14,21 @@
         </div>
 
 
-
         <div class="mb-3">
-            <label for="accountFrom" class="form-label">Account Id: </label>
-            <input type="text" class="form-control" id="accountFrom" name="account[accountFrom]"
-                value="<%= account._id %>" readonly>
-            <div class="valid-feedback"> Looks Good!</div>
+            <label for="frontImage" class="form-label">Add Image of Front of the Check</label>
+            <input type="file" class="form-control" id="frontImage" name="frontImage" required>
+            <div class="invalid-feedback">Please upload an image of the front of your check.</div>
         </div>
 
 
         <div class="mb-3">
-            <label for="formFileMultiple" class="form-label">Add Images of your Check</label>
-            <input type="file" class="form-control" id="formFileMultiple" name="image" multiple>
-            <div class="invalid-feedback">
-                You need to submit a picture of your check
-            </div>
+            <label for="backImage" class="form-label">Add Image of Back of the Check</label>
+            <input type="file" class="form-control" id="backImage" name="backImage" required>
+            <div class="invalid-feedback">Please upload an image of the back of your check.</div>
         </div>
+
+
+        <input type="hidden" name="account[accountFrom]" value="<%= account._id %>">
 
 
 
@@ -63,4 +65,4 @@
     </script>
 
 
-    <footer id="depositFoot"><a href="/accountViews/<%= account._id %>">Return to Showing the Account</a></footer>
+    <footer id="depositFoot"><a href="/accountViews/<%= account._id %>">Go back to Account Details</a></footer>

@@ -26,6 +26,102 @@ module.exports.myAccounts = async (req, res) => {
     }
 }
 
+
+
+module.exports.renderCreateAccount = async (req, res) => {
+    try {
+        const accounts = await Account.find({ holder: req.user._id });
+        res.render('accountViews/createAccount', { accounts, userId: req.user._id });
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'An error occurred while rendering the createAccount page');
+        res.redirect('/');
+    }
+};
+
+
+
+
+module.exports.createAccount = async (req, res) => {
+    try {
+        const account = new Account(req.body.account);
+        account.holder = req.user._id;
+        account.accountId = uuidv4();
+        account.totalInCents = 0;
+        await account.save();
+        const user = await User.findById(req.user._id);
+        user.numOfAccounts += 1;
+        user.accountIds.push(account._id);
+        await user.save();
+        res.redirect(`/accountViews/${account._id}`)
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'An error occurred while creating an account');
+        res.redirect('/accountViews/myAccounts');
+    }
+}
+
+
+
+module.exports.renderRequestCard = async (req, res) => {
+    try {
+        const accounts = await Account.find({ holder: req.user._id });
+        res.render('accountViews/requestCard', { accounts });
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'An error occurred while rendering the RequestCard page');
+        res.redirect('/');
+    }
+};
+
+
+
+module.exports.renderRequestLoan = async (req, res) => {
+    try {
+        const accounts = await Account.find({ holder: req.user._id });
+        res.render('accountViews/requestLoan', { accounts });
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'An error occurred while rendering the RequestLoan page');
+        res.redirect('/');
+    }
+};
+
+
+
+module.exports.renderTransferFriend = async (req, res) => {
+    try {
+        const accounts = await Account.find({ holder: req.user._id });
+        res.render('accountViews/transferFriend', { accounts });
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'An error occurred while rendering the RequestLoan page');
+        res.redirect('/');
+    }
+};
+module.exports.renderTransferAccount = async (req, res) => {
+    try {
+        const accounts = await Account.find({ holder: req.user._id });
+        res.render('accountViews/transferAccount', { accounts });
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'An error occurred while rendering the RequestLoan page');
+        res.redirect('/');
+    }
+};
+module.exports.renderPayOffLoan = async (req, res) => {
+    try {
+        const accounts = await Account.find({ holder: req.user._id });
+        res.render('accountViews/payOffLoan', { accounts });
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'An error occurred while rendering the RequestLoan page');
+        res.redirect('/');
+    }
+};
+
+
+
 module.exports.transfer = async (req, res) => {
     try {
         const accounts = await Account.find({ holder: req.user._id });
@@ -41,13 +137,13 @@ module.exports.sendMessage = async (req, res) => {
     try {
         const { email, name, message } = req.body;
 
-        const tempName = capitalizeFirstLetter(name);
-        const tempEmail = email.toLowerCase();
-        const tempMessage = capitalizeFirstLetter(message);
+        const tempName = capitalizeFirstLetter(name).trim();
+        const tempEmail = email.toLowerCase().trim();
+        const tempMessage = capitalizeFirstLetter(message).trim();
         const newMessage = new Message({
-            email: tempEmail.trim(),
-            name: tempName.trim(),
-            message: tempMessage.trim()
+            email: tempEmail,
+            name: tempName,
+            message: tempMessage
         });
 
         await newMessage.save();
@@ -102,7 +198,7 @@ module.exports.processTransfer = async (req, res) => {
         const fromAccountId = req.body.transferFromAccount;
         const toUsername = req.body.transferToAccount;
         if (fromAccountId) {
-            const transferAmount = Math.round(req.body.account.totalInCents * 100).trim();
+            const transferAmount = Math.round(req.body.account.totalInCents * 100);
 
             const fromAccount = await Account.findById(fromAccountId);
             const toUser = await User.findOne({ username: toUsername });
@@ -215,13 +311,13 @@ module.exports.processTransferWithin = async (req, res) => {
             const toTransactionAmount = toAccount.accountType === 'Credit' ? -transferAmount : transferAmount;
 
             const fromTransaction = {
-                amountInCents: fromTransactionAmount.trim(),
+                amountInCents: fromTransactionAmount,
                 type: "Withdrawal",
                 date: new Date()
             };
 
             const toTransaction = {
-                amountInCents: toTransactionAmount.trim(),
+                amountInCents: toTransactionAmount,
                 type: "Deposit",
                 date: new Date()
             };
@@ -253,7 +349,7 @@ module.exports.payOffBalance = async (req, res) => {
     try {
         const fromAccountId = req.body.transferFromAccount;
         const payingOffAccountId = req.body.payingOffAccount;
-        const paymentAmountInCents = Math.round(req.body.account.totalInCents * 100).trim();
+        const paymentAmountInCents = Math.round(req.body.account.totalInCents * 100);
         const fromAccount = await Account.findById(fromAccountId);
         const payingOffAccount = await Account.findById(payingOffAccountId);
         const bankAccount = await Account.findOne({ accountId: "BANK-001" });
@@ -324,8 +420,7 @@ module.exports.renderNewForm = async (req, res) => {
     try {
         const userId = req.user._id;
         const accounts = await Account.find({ holder: userId });
-        const account = accounts[0];
-        res.render("accountViews/newAccount", { accounts, account });
+        res.render("accountViews/newAccount", { accounts, userId });
     } catch (error) {
         console.error(error);
         req.flash('error', 'An error occurred while loading the form');
@@ -333,25 +428,6 @@ module.exports.renderNewForm = async (req, res) => {
     }
 }
 
-
-module.exports.createAccount = async (req, res) => {
-    try {
-        const account = new Account(req.body.account);
-        account.holder = req.user._id;
-        account.accountId = uuidv4();
-        account.totalInCents = 0;
-        await account.save();
-        const user = await User.findById(req.user._id);
-        user.numOfAccounts += 1;
-        user.accountIds.push(account._id);
-        await user.save();
-        res.redirect(`/accountViews/${account._id}`)
-    } catch (error) {
-        console.error(error);
-        req.flash('error', 'An error occurred while creating an account');
-        res.redirect('/accountViews/myAccounts');
-    }
-}
 
 module.exports.showAccount = async (req, res, next) => {
     try {
