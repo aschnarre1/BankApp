@@ -58,7 +58,7 @@ module.exports.requestSchema = Joi.object({
     creditCardInfo: module.exports.creditCardReqSchema.optional(),
     loanInfo: module.exports.loanReqSchema.optional(),
     user: Joi.string().required(),
-    amountInCents: Joi.number().integer().allow(null).min(0),
+    amountInCents: Joi.number().integer().allow(null).min(1),
     accountFrom: Joi.object({
         id: Joi.string().required(),
         accountType: Joi.string().required()
@@ -101,15 +101,9 @@ module.exports.accountSchema = Joi.object({
 module.exports.userSchema = Joi.object({
     firstName: Joi.string().pattern(/^[A-Za-z]+$/).required().min(3).max(25).escapeHTML(),
     lastName: Joi.string().pattern(/^[A-Za-z]+$/).required().min(3).max(25).escapeHTML(),
-    username: Joi.string().min(8).max(15).alphanum().custom((value, helpers) => {
-        if (/^(.)\1+$/.test(value)) {
-            return helpers.error('any.invalid');
-        }
-        return value;
-    }, 'Non-repetitive character validation')
-        .required().alphanum().escapeHTML(),
+    username: Joi.string().pattern(/^[A-Za-z][A-Za-z0-9_]{7,14}$/).required().escapeHTML(),
     email: Joi.string().email().required().escapeHTML(),
-    password: Joi.string().pattern(new RegExp('(?=.*[A-Z])(?=.*[!@#$&*])')).required().escapeHTML(),
+    password: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,30})')).required().escapeHTML(),
     grossIncome: Joi.string().required(),
     ssn: Joi.string().pattern(new RegExp('^[0-9]{3}-[0-9]{2}-[0-9]{4}$')).required(),
     address: Joi.object({
@@ -117,10 +111,9 @@ module.exports.userSchema = Joi.object({
         line2: Joi.string().allow('', null).escapeHTML(),
         city: Joi.string().required().escapeHTML(),
         state: Joi.string().required().escapeHTML(),
-        zip: Joi.string().required().escapeHTML(),
+        zip: Joi.string().pattern(/^[0-9]{5}$/).required().escapeHTML(),
         country: Joi.string().required().escapeHTML()
     }).required(),
-    phoneNumber: Joi.string().required().escapeHTML(),
+    phoneNumber: Joi.string().pattern(/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/).required().escapeHTML(),
     validId: Joi.string().required()
 }).required();
-

@@ -86,6 +86,7 @@ function decrypt(text) {
 module.exports.register = async (req, res, next) => {
     try {
         const { firstName, lastName, email, username, password, grossIncome, ssn, address, phoneNumber } = req.body;
+        const uniqueId = await generateUniqueId();
 
         const passwordRegex = /(?=.*[A-Z])(?=.*[!@#$&*])/;
         if (!passwordRegex.test(password)) {
@@ -170,10 +171,10 @@ module.exports.register = async (req, res, next) => {
         } else {
 
             const starterAccount = new Account({
+                _id: uniqueId,
                 holder: registeredUser._id,
                 accountType: "Checkings",
                 totalInCents: 0,
-                accountId: uuidv4()
             });
             await starterAccount.save();
 
@@ -200,6 +201,14 @@ function capitalizeFirstLetter(string) {
         return s.toUpperCase();
     });
 }
+
+
+
+
+
+
+
+
 
 
 module.exports.renderLogin = (req, res) => {
@@ -469,4 +478,24 @@ async function checkForUserOverduePayments(userId) {
             await account.save();
         }
     });
+}
+
+
+
+
+function generateRandomId() {
+    const min = Math.pow(10, 11);
+    const max = Math.pow(10, 12) - 1;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+async function generateUniqueId() {
+    let uniqueId;
+    let userExists = true;
+    while (userExists) {
+        uniqueId = generateRandomId();
+        userExists = await User.exists({ _id: uniqueId });
+    }
+    return uniqueId;
 }

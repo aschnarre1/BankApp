@@ -22,7 +22,6 @@ module.exports.createRequest = async (req, res) => {
             filename: req.files.frontImage[0].filename
         } : null;
 
-
         console.log("FrontImage URL " + frontImage.url);
 
         const backImage = req.files.backImage ? {
@@ -43,8 +42,6 @@ module.exports.createRequest = async (req, res) => {
                 backImage: backImage
             }
         });
-
-        console.log("Request " + request);
 
         await request.save();
         req.flash('success', 'Request sent to admin for approval');
@@ -208,6 +205,7 @@ module.exports.loanRequests = async (req, res) => {
 
 module.exports.cardApproved = async (req, res) => {
     try {
+        const uniqueId = await generateUniqueId();
         const { requestId } = req.params;
         const request = await UserRequest.findById(requestId);
 
@@ -221,7 +219,7 @@ module.exports.cardApproved = async (req, res) => {
 
         const account = new Account(req.body.account);
         account.holder = request.user._id;
-        account.accountId = uuidv4();
+        account._id = uniqueId;
         account.totalInCents = request.totalInCents;
         account.accountType = "Credit";
         account.creditCardName = request.creditCardInfo.creditCardType;
@@ -261,6 +259,7 @@ module.exports.cardApproved = async (req, res) => {
 
 module.exports.loanApproved = async (req, res) => {
     try {
+        const uniqueId = await generateUniqueId();
         const { requestId } = req.params;
         const request = await UserRequest.findById(requestId);
 
@@ -285,7 +284,7 @@ module.exports.loanApproved = async (req, res) => {
 
         const userLoanAccount = new Account({
             holder: request.user._id,
-            accountId: uuidv4(),
+            _id: uniqueId,
             totalInCents: request.amountInCents,
             accountType: "Loan",
             loanInfo: {
@@ -345,4 +344,24 @@ function calculateNextPaymentDate() {
     let today = new Date();
     let nextPaymentDate = new Date(today.getFullYear(), today.getMonth() + 1, 1); // Sets the date to the 1st of next month
     return nextPaymentDate;
+}
+
+
+
+
+function generateRandomId() {
+    const min = Math.pow(10, 11);
+    const max = Math.pow(10, 12) - 1;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+async function generateUniqueId() {
+    let uniqueId;
+    let userExists = true;
+    while (userExists) {
+        uniqueId = generateRandomId();
+        userExists = await User.exists({ _id: uniqueId });
+    }
+    return uniqueId;
 }

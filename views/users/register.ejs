@@ -6,7 +6,7 @@
         <div class="mb-3">
             <label class="form-label" for="firstName">First Name</label>
             <input class="form-control" type="text" id="firstName" name="firstName" pattern="^[A-Za-z]+$" minlength="3"
-                maxlength="25" required>
+                maxlength="25" title="Must be between 3 and 25 character and only contain letters" required>
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -14,15 +14,16 @@
         <div class="mb-3">
             <label class="form-label" for="lastName">Last Name</label>
             <input class="form-control" type="text" id="lastName" name="lastName" pattern="^[A-Za-z]+$" minlength="3"
-                maxlength="25" required>
+                maxlength="25" title="Must be betweed 3 and 25 characters and only contain letters" required>
             <div class="valid-feedback">
                 Looks good!
             </div>
         </div>
         <div class="mb-3">
             <label class="form-label" for="username">Username</label>
-            <input class="form-control" type="text" id="username" name="username" pattern="^[A-Za-z0-9]+$" minlength="8"
-                maxlength="15" required>
+            <input class="form-control" type="text" id="username" name="username" pattern="^[A-Za-z][A-Za-z0-9_]{7,14}$"
+                title="Username must be 8-15 characters long, start with a letter, and can contain alphanumeric characters and underscores"
+                required>
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -30,7 +31,7 @@
         <div class="mb-3">
             <label class="form-label" for="email">Email</label>
             <input class="form-control" type="email" id="email" name="email"
-                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Must have a valid email layout" required>
 
             <div class="valid-feedback">
                 Looks good!
@@ -39,12 +40,14 @@
         <div class="mb-3">
             <label class="form-label" for="password">Password</label>
             <input class="form-control" type="password" id="password" name="password"
-                pattern="(?=.*[A-Z])(?=.*[!@#$&*]).{8,}"
-                title="Must contain at least one uppercase letter and one special character" required>
+                pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,30}"
+                title="Password must be 8-30 characters long, include uppercase and lowercase letters, a number, and a special character"
+                required>
             <div class="valid-feedback">
                 Looks good!
             </div>
         </div>
+
         <div class="mb-3">
             <label class="form-label" for="grossIncome">Gross Income</label>
             <input type="text" class="form-control" id="grossIncome" name="grossIncome" required
@@ -101,7 +104,8 @@
 
         <div class="mb-3">
             <label class="form-label" for="zip">Zip Code</label>
-            <input class="form-control" type="text" id="zip" name="address[zip]" required>
+            <input class="form-control" type="text" id="zip" name="address[zip]" pattern="^[0-9]{5}$"
+                title="Enter a valid 5-digit ZIP code" required>
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -117,29 +121,11 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         <div class="mb-3">
             <label class="form-label" for="phoneNumber">Phone Number</label>
-            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" required
-                oninput="formatPhoneNumber(this)">
+            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber"
+                pattern="^[0-9]{3}-[0-9]{3}-[0-9]{4}$" title="Enter a valid phone number in the format 123-456-7890"
+                required oninput="formatPhoneNumber(this)">
             <div class="valid-feedback">
                 Looks good!
             </div>

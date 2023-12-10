@@ -62,6 +62,7 @@ module.exports.isHolder = async (req, res, next) => {
 }
 
 
+
 module.exports.isUser = async (req, res, next) => {
     const { id } = req.params;
     if (!req.isAuthenticated()) {

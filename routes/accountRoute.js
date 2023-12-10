@@ -34,12 +34,12 @@ router.get('/payOffLoan', isLoggedIn, catchAsync(accounts.renderPayOffLoan));
 router.post('/send-message', validateMessage, accounts.sendMessage);
 
 
-router.post('/processTransfer', isLoggedIn, accounts.processTransfer);
-router.post('/processTransferWithin', isLoggedIn, accounts.processTransferWithin);
-router.post('/payOffBalance', isLoggedIn, accounts.payOffBalance);
+router.post('/processTransfer', isHolder, isLoggedIn, accounts.processTransfer);
+router.post('/processTransferWithin', isHolder, isLoggedIn, accounts.processTransferWithin);
+router.post('/payOffBalance', isHolder, isLoggedIn, accounts.payOffBalance);
 
 router.route('/:id')
-    .get(isLoggedIn, catchAsync(accounts.showAccount))
+    .get(isLoggedIn, isHolder, catchAsync(accounts.showAccount))
     .delete(isLoggedIn, isHolder, catchAsync(accounts.deleteAccount))
 
 router.get('/:id/editAccount', isLoggedIn, isHolder, catchAsync(accounts.renderEditForm))
@@ -47,10 +47,10 @@ router.get('/:id/editAccount', isLoggedIn, isHolder, catchAsync(accounts.renderE
 router.post('/:id/Freeze', isLoggedIn, isAdmin, catchAsync(accounts.freezeAccount));
 router.post('/:id/Unfreeze', isLoggedIn, isAdmin, catchAsync(accounts.unfreezeAccount));
 
-router.post('/:id/Lock', isLoggedIn, catchAsync(accounts.lockAccount));
-router.post('/:id/Unlock', isLoggedIn, catchAsync(accounts.unlockAccount));
+router.post('/:id/Lock', isLoggedIn, isHolder, catchAsync(accounts.lockAccount));
+router.post('/:id/Unlock', isLoggedIn, isHolder, catchAsync(accounts.unlockAccount));
 
-router.post('/accountViews/:id/requestDeposit', isLoggedIn, catchAsync(accounts.updateAccountWithDeposit));
+router.post('/accountViews/:id/requestDeposit', isHolder, isLoggedIn, catchAsync(accounts.updateAccountWithDeposit));
 
 
 

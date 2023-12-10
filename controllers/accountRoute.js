@@ -42,11 +42,13 @@ module.exports.renderCreateAccount = async (req, res) => {
 
 
 
+
 module.exports.createAccount = async (req, res) => {
     try {
+        const uniqueId = await generateUniqueId();
         const account = new Account(req.body.account);
         account.holder = req.user._id;
-        account.accountId = uuidv4();
+        account._id = uniqueId;
         account.totalInCents = 0;
         await account.save();
         const user = await User.findById(req.user._id);
@@ -626,4 +628,23 @@ function getNextMonthFirstDay(currentDueDate) {
     dueDate.setMonth(dueDate.getMonth() + 1);
     dueDate.setDate(1);
     return dueDate;
+}
+
+
+
+function generateRandomId() {
+    const min = Math.pow(10, 11);
+    const max = Math.pow(10, 12) - 1;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+async function generateUniqueId() {
+    let uniqueId;
+    let userExists = true;
+    while (userExists) {
+        uniqueId = generateRandomId();
+        userExists = await User.exists({ _id: uniqueId });
+    }
+    return uniqueId;
 }
