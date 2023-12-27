@@ -39,7 +39,7 @@ router.post('/processTransferWithin', isHolder, isLoggedIn, accounts.processTran
 router.post('/payOffBalance', isHolder, isLoggedIn, accounts.payOffBalance);
 
 router.route('/:id')
-    .get(isLoggedIn, isHolder, catchAsync(accounts.showAccount))
+    .get(isLoggedIn, catchAsync(accounts.showAccount))
     .delete(isLoggedIn, isHolder, catchAsync(accounts.deleteAccount))
 
 router.get('/:id/editAccount', isLoggedIn, isHolder, catchAsync(accounts.renderEditForm))

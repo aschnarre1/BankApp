@@ -1,10 +1,7 @@
 <% layout("layouts/boilierplate")%>
     <link rel="stylesheet" href="/stylesheets/allBank.css">
-
     <h1>Admin View of All accounts</h1>
-
     <input type="text" id="searchBar" placeholder="Search by username" oninput="filterAccounts()">
-
     <% for (let account of accounts){ %>
         <div class=" card" data-username="<%= account.holder.username %>">
             <div class="card-header">
@@ -21,7 +18,6 @@
                         $<%= totalInDollars %>
                 </h5>
             </div>
-
             <% if(account.isFrozen) { %>
                 <form action="/accountViews/<%= account._id %>/Unfreeze" method="post">
                     <button type="submit" class="btn btn-primary">Unfreeze</button>
@@ -30,10 +26,8 @@
                     <form action="/accountViews/<%= account._id %>/Freeze" method="post">
                         <button type="submit" class="btn btn-primary">Freeze</button>
                     </form>
-
                     <% } %>
         </div>
-
         <% }%>
 
 

@@ -26,10 +26,6 @@ const Joi = BaseJoi.extend(extension)
 
 
 
-
-
-
-
 module.exports.messageSchema = Joi.object({
     email: Joi.string().email().required().escapeHTML(),
     name: Joi.string().required().pattern(/^[A-Za-z\s]+$/).min(3).max(45).escapeHTML(),
@@ -117,3 +113,6 @@ module.exports.userSchema = Joi.object({
     phoneNumber: Joi.string().pattern(/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/).required().escapeHTML(),
     validId: Joi.string().required()
 }).required();
+
+
+

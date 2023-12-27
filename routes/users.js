@@ -15,11 +15,9 @@ router.route('/register')
     .get(users.renderRegister)
     .post(upload.single('validId'), validateUser, catchAsync(users.register));
 
-
 router.route('/login')
     .get(users.renderLogin)
     .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), users.login)
-
 
 router.get('/creditCardInfo', users.renderCreditInfo);
 router.get('/loanInfo', users.renderLoanInfo);

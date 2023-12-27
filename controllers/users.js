@@ -87,21 +87,17 @@ module.exports.register = async (req, res, next) => {
     try {
         const { firstName, lastName, email, username, password, grossIncome, ssn, address, phoneNumber } = req.body;
         const uniqueId = await generateUniqueId();
-
         const passwordRegex = /(?=.*[A-Z])(?=.*[!@#$&*])/;
         if (!passwordRegex.test(password)) {
             req.flash('error', 'Password must contain at least one uppercase letter and one special character.');
             return res.redirect('/register');
         }
-
-
         const formattedUsername = username.trim();
         const existingUsername = await User.findOne({ username: formattedUsername });
         if (existingUsername) {
             req.flash('error', 'Username already exists.');
             return res.redirect('/register');
         }
-
         const tempSSN = ssn.trim();
         const encryptedSSN = encrypt(tempSSN);
         const existingSSN = await User.findOne({ ssn: encryptedSSN });
@@ -433,10 +429,6 @@ module.exports.getMessageCount = async (req, res) => {
         res.status(500).json({ error: 'An error occurred while getting the message count' });
     }
 };
-
-
-
-
 
 
 
