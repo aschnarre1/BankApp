@@ -48,3 +48,26 @@ The overall structure of my program are as follows:
 
 
 
+## An example of how the project works:
+If someone were to want to register for a new account via the navbar navigation the flow of data would look something like this (for the sake of showing more information lets assume that the user submitted information upon arriving at the show register page):
+
+1. The user would click on the link that would take them to the /register route
+
+
+
+2. The register route would call the renderRegister page where they would then enter all information. Submitting would call the post route which would then call the middleware.
+
+3. The validate user is called which checks to see if all user information entered was valid alongside the schema settings.
+
+
+4. The data is associated with the model as it was entered as such.
+
+
+
+5. The data is checked to ensure that all data entered is compliant with the given restraints.
+
+
+6. The route then calls for the register controller as it has called the middleware first:
+
+
+7.  Finally the controller runs taking all verified user data entered on the form page and formats, encrypts and stores it in the Database
