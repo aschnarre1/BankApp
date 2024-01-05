@@ -60,7 +60,7 @@ If someone were to want to register for a new account via the navbar navigation 
 3. The validate user is called which checks to see if all user information entered was valid alongside the schema settings.
 ![Validate User Middleware](/readMeImages/validateUser.png)
 
-4. The data is associated with the model as it was entered as such.
+4. The data is associated with the model as it was entered as such within the given model.
 ![User Model](/readMeImages/userSchema.png)
 
 5. The data is checked to ensure that all data entered is compliant with the given restraints.
