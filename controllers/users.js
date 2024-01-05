@@ -1,3 +1,4 @@
+// Import necessary modules and models
 const { v4: uuidv4 } = require('uuid');
 const User = require('../models/user');
 const { Account } = require('../models/accounts');
@@ -6,9 +7,7 @@ const { Message } = require('../models/accounts');
 const crypto = require('crypto');
 require('dotenv').config();
 
-
-
-
+// Controller to render the registration page
 module.exports.renderRegister = (req, res) => {
     try {
         res.render('users/register');
@@ -19,8 +18,7 @@ module.exports.renderRegister = (req, res) => {
     }
 }
 
-
-
+// Controller to render the credit card information page
 module.exports.renderCreditInfo = async (req, res) => {
     try {
         res.render("users/creditCardInfo");
@@ -30,6 +28,8 @@ module.exports.renderCreditInfo = async (req, res) => {
         res.redirect('/');
     }
 }
+
+// Controller to render the loan information page
 module.exports.renderLoanInfo = async (req, res) => {
     try {
         res.render("users/loanInfo");
@@ -39,6 +39,8 @@ module.exports.renderLoanInfo = async (req, res) => {
         res.redirect('/');
     }
 }
+
+// Controller to render the About Us page
 module.exports.renderAboutUs = async (req, res) => {
     try {
         res.render("users/aboutUs");
@@ -48,6 +50,8 @@ module.exports.renderAboutUs = async (req, res) => {
         res.redirect('/');
     }
 }
+
+// Controller to render the Contact Us page
 module.exports.renderContactUs = async (req, res) => {
     try {
         res.render("users/contactUs");
@@ -58,13 +62,11 @@ module.exports.renderContactUs = async (req, res) => {
     }
 }
 
-
-
-
-
+// Encryption key and initialization vector length for crypto
 const ENCRYPTION_KEY = process.env.ENCRYPTION_SECRET;
 const IV_LENGTH = 16;
 
+// Function to encrypt text using AES-256-CBC
 function encrypt(text) {
     let iv = crypto.randomBytes(IV_LENGTH);
     let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);
@@ -73,6 +75,7 @@ function encrypt(text) {
     return iv.toString('hex') + ':' + encrypted.toString('hex');
 }
 
+// Function to decrypt text using AES-256-CBC
 function decrypt(text) {
     let textParts = text.split(':');
     let iv = Buffer.from(textParts.shift(), 'hex');
@@ -83,6 +86,7 @@ function decrypt(text) {
     return decrypted.toString();
 }
 
+//Controller to handle user registration
 module.exports.register = async (req, res, next) => {
     try {
         const { firstName, lastName, email, username, password, grossIncome, ssn, address, phoneNumber } = req.body;
@@ -191,22 +195,14 @@ module.exports.register = async (req, res, next) => {
     }
 };
 
-
+//Controller to capitilize the first letter of a string for consistant formatting
 function capitalizeFirstLetter(string) {
     return string.toLowerCase().replace(/\b(\w)/g, function (s) {
         return s.toUpperCase();
     });
 }
 
-
-
-
-
-
-
-
-
-
+//Controller to render the user login page
 module.exports.renderLogin = (req, res) => {
     try {
         res.render('users/login');
@@ -217,7 +213,7 @@ module.exports.renderLogin = (req, res) => {
     }
 }
 
-
+//controller to render the admin view page
 module.exports.renderAdminView = async (req, res) => {
     try {
         const accounts = await Account.find({})
@@ -233,7 +229,7 @@ module.exports.renderAdminView = async (req, res) => {
     }
 }
 
-
+//controller to render the admin request page
 module.exports.renderAdminRequests = async (req, res) => {
     try {
         const requests = await UserRequest.find({})
@@ -252,8 +248,7 @@ module.exports.renderAdminRequests = async (req, res) => {
     }
 }
 
-
-
+//Controller to render the admin page to see all users
 module.exports.renderAdminUsers = async (req, res) => {
     try {
         const users = await User.find({});
@@ -265,11 +260,7 @@ module.exports.renderAdminUsers = async (req, res) => {
     }
 }
 
-
-
-
-
-
+//Controller to render all user details
 module.exports.renderUserDetails = async (req, res) => {
     try {
         const user = await User.findById(req.params.userId)
@@ -304,11 +295,7 @@ module.exports.renderUserDetails = async (req, res) => {
     }
 };
 
-
-
-
-
-
+//Controller to render the request details page
 module.exports.renderRequestDetails = async (req, res) => {
     try {
 
@@ -334,11 +321,7 @@ module.exports.renderRequestDetails = async (req, res) => {
     }
 }
 
-
-
-
-
-
+//Controller to render all user messages for the admin
 module.exports.renderAdminMessages = async (req, res) => {
     try {
         const messages = await Message.find({});
@@ -349,8 +332,7 @@ module.exports.renderAdminMessages = async (req, res) => {
     }
 }
 
-
-
+//Controller to mark a message as read for the admin
 module.exports.adminMessageRead = async (req, res) => {
     try {
         const { messageId } = req.params;
@@ -364,9 +346,7 @@ module.exports.adminMessageRead = async (req, res) => {
     }
 }
 
-
-
-
+//Controller to allow a user to login
 module.exports.login = async (req, res) => {
     try {
         if (!req.user) {
@@ -402,7 +382,7 @@ module.exports.login = async (req, res) => {
     }
 }
 
-
+// Controller to get the count of pending request and send as a JSON response
 module.exports.getRequestCount = async (req, res) => {
     try {
         const pendingRequestCount = await UserRequest.countDocuments({ approved: null });
@@ -414,12 +394,7 @@ module.exports.getRequestCount = async (req, res) => {
 };
 
 
-
-
-
-
-
-
+// Controller to get the count of pending messages and send as a JSON response
 module.exports.getMessageCount = async (req, res) => {
     try {
         const pendingMessageCount = await Message.countDocuments({ isRead: null });
@@ -431,7 +406,7 @@ module.exports.getMessageCount = async (req, res) => {
 };
 
 
-
+//Controller for a user to logout of their account
 module.exports.logout = (req, res) => {
     try {
         req.logout(() => {
@@ -444,7 +419,7 @@ module.exports.logout = (req, res) => {
     }
 }
 
-
+//Controller to delete a user and all of their data
 module.exports.deleteUser = async (req, res) => {
     try {
         const { id } = req.params;
@@ -458,7 +433,7 @@ module.exports.deleteUser = async (req, res) => {
     }
 }
 
-
+//function that checks to see if a loan has not payed thier monthly payment
 async function checkForUserOverduePayments(userId) {
     const today = new Date();
     const userAccounts = await Account.find({ holder: userId, accountType: "Loan" || "Credit" });
@@ -472,16 +447,14 @@ async function checkForUserOverduePayments(userId) {
     });
 }
 
-
-
-
+//Generates a random ID for each account
 function generateRandomId() {
     const min = Math.pow(10, 11);
     const max = Math.pow(10, 12) - 1;
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-
+//Ensures that each ID is unique or else it re-rolls
 async function generateUniqueId() {
     let uniqueId;
     let userExists = true;

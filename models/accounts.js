@@ -1,7 +1,8 @@
+// Import Mongoose and create a Schema object
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-
+// Define a schema for transactions, including date, amount, and type
 const TransactionSchema = new Schema({
     date: {
         type: Date,
@@ -14,6 +15,7 @@ const TransactionSchema = new Schema({
     type: String,
 });
 
+// Define a schema for messages, including email, name, message content, and read status
 const MessageSchema = new Schema({
     email: {
         type: String,
@@ -36,6 +38,7 @@ const MessageSchema = new Schema({
 
 });
 
+// Define a schema for loan details, including type, term, and monthly minimum payment
 const loanSchema = new Schema({
     loanType: {
         type: String,
@@ -52,8 +55,7 @@ const loanSchema = new Schema({
 
 });
 
-
-
+// Define a comprehensive schema for accounts, including various account details and references
 const AccountSchema = new Schema({
     accountType: String,
     loanInfo: loanSchema,
@@ -102,6 +104,6 @@ const AccountSchema = new Schema({
 
 });
 
-
+// Export the schemas as models to be used in other parts of the application
 module.exports.Message = mongoose.model('Message', MessageSchema);
 module.exports.Account = mongoose.model("Account", AccountSchema);

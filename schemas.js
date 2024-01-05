@@ -1,6 +1,8 @@
+// Import the base Joi library for validation and the sanitize-html library for sanitization
 const BaseJoi = require('joi');
 const sanitizeHtml = require('sanitize-html');
 
+// Define a custom extension for the Joi library to sanitize HTML from strings
 const extension = (joi) => ({
     type: 'string',
     base: joi.string(),
@@ -22,10 +24,11 @@ const extension = (joi) => ({
 
 });
 
+// Extend the Joi library with the custom HTML sanitization rule
 const Joi = BaseJoi.extend(extension)
 
 
-
+// Define a validation schema for messages
 module.exports.messageSchema = Joi.object({
     email: Joi.string().email().required().escapeHTML(),
     name: Joi.string().required().pattern(/^[A-Za-z\s]+$/).min(3).max(45).escapeHTML(),
@@ -33,23 +36,21 @@ module.exports.messageSchema = Joi.object({
     isRead: Joi.boolean().allow(null)
 });
 
-
-
-
+// Define a validation schema for loan requests
 module.exports.loanReqSchema = Joi.object({
     loanType: Joi.string().allow(null, ''),
     loanTerm: Joi.string().allow(null, ''),
     monthlyMinimumInCents: Joi.number().integer().allow(null).min(0)
 });
 
-
+// Define a validation schema for credit card requests
 module.exports.creditCardReqSchema = Joi.object({
     creditCardType: Joi.string().allow(null, ''),
     employmentStatus: Joi.string().allow(null, ''),
     grossIncome: Joi.number().integer().allow(null).min(0)
 });
 
-
+// Define a validation schema for general requests that others add onto
 module.exports.requestSchema = Joi.object({
     creditCardInfo: module.exports.creditCardReqSchema.optional(),
     loanInfo: module.exports.loanReqSchema.optional(),
@@ -71,8 +72,7 @@ module.exports.requestSchema = Joi.object({
     }).optional()
 });
 
-
-
+// Define a validation schema for accounts
 module.exports.accountSchema = Joi.object({
     account: Joi.object({
         accountType: Joi.string().trim().required().escapeHTML().valid('Savings', 'Checkings', 'Credit', 'Bank').max(12),
@@ -93,7 +93,7 @@ module.exports.accountSchema = Joi.object({
     }).required().unknown(false)
 });
 
-
+// Define a validation schema for users
 module.exports.userSchema = Joi.object({
     firstName: Joi.string().pattern(/^[A-Za-z]+$/).required().min(3).max(25).escapeHTML(),
     lastName: Joi.string().pattern(/^[A-Za-z]+$/).required().min(3).max(25).escapeHTML(),

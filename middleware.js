@@ -5,7 +5,7 @@ const User = require("./models/user.js")
 
 
 
-
+//Middleware to check if the user is logged in 
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
         req.session.returnTo = req.originalUrl;
@@ -15,7 +15,7 @@ module.exports.isLoggedIn = (req, res, next) => {
     next();
 }
 
-
+//Middleware to validate account data against a Joi schema
 module.exports.validateAccount = (req, res, next) => {
     const { error } = accountSchema.validate(req.body);
     if (error) {
@@ -26,7 +26,7 @@ module.exports.validateAccount = (req, res, next) => {
     }
 }
 
-
+// Middleware to validate user data, including handling file uploads for valid IDs
 module.exports.validateUser = (req, res, next) => {
     if (req.file) {
         req.body.validId = req.file.path;
@@ -48,8 +48,7 @@ module.exports.validateUser = (req, res, next) => {
     }
 }
 
-
-
+//Middleware to checked if the user that is logged in holds a certain account
 module.exports.isHolder = async (req, res, next) => {
     const { id } = req.params;
     const account = await Account.findById(id);
@@ -62,7 +61,7 @@ module.exports.isHolder = async (req, res, next) => {
 }
 
 
-
+//Middleware to check if the user that is logged in is the is the same user that is requesting to do an action
 module.exports.isUser = async (req, res, next) => {
     const { id } = req.params;
     if (!req.isAuthenticated()) {
@@ -79,8 +78,7 @@ module.exports.isUser = async (req, res, next) => {
     next();
 }
 
-
-
+//Middleware to check if the user that is logged in making a request
 module.exports.isRequestOwner = async (req, res, next) => {
     const { id } = req.params;
     const request = await Request.findById(id);
@@ -91,7 +89,7 @@ module.exports.isRequestOwner = async (req, res, next) => {
     next();
 }
 
-
+//Middlware that checks to see if the user that is logged in is the admin 
 module.exports.isAdmin = async (req, res, next) => {
     if (req.user && req.user.isAdmin) {
         return next();
@@ -100,7 +98,7 @@ module.exports.isAdmin = async (req, res, next) => {
     res.redirect('/');
 }
 
-
+//Middleware that ensures that the message follows the Joi constraints
 module.exports.validateMessage = (req, res, next) => {
     const { error } = messageSchema.validate(req.body);
     if (error) {

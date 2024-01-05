@@ -1,9 +1,11 @@
+// Import necessary modules and models
 const { v4: uuidv4 } = require('uuid');
 const { Account } = require('../models/accounts');
 const User = require('../models/user');
 const UserRequest = require('../models/userRequest');
 const { Message } = require('../models/accounts');
 
+// Controller for displaying all accounts
 module.exports.index = async (req, res) => {
     try {
         const accounts = await Account.find({});
@@ -15,6 +17,7 @@ module.exports.index = async (req, res) => {
     }
 }
 
+// Controller for displaying user's accounts
 module.exports.myAccounts = async (req, res) => {
     try {
         const accounts = await Account.find({});
@@ -26,8 +29,7 @@ module.exports.myAccounts = async (req, res) => {
     }
 }
 
-
-
+// Controller for rendering the account creation page
 module.exports.renderCreateAccount = async (req, res) => {
     try {
         const accounts = await Account.find({ holder: req.user._id });
@@ -39,10 +41,7 @@ module.exports.renderCreateAccount = async (req, res) => {
     }
 };
 
-
-
-
-
+// Controller for creating a new account
 module.exports.createAccount = async (req, res) => {
     try {
         const uniqueId = await generateUniqueId();
@@ -63,8 +62,7 @@ module.exports.createAccount = async (req, res) => {
     }
 }
 
-
-
+// Controller for rendering the request card page
 module.exports.renderRequestCard = async (req, res) => {
     try {
         const accounts = await Account.find({ holder: req.user._id });
@@ -76,8 +74,7 @@ module.exports.renderRequestCard = async (req, res) => {
     }
 };
 
-
-
+// Controller for rendering the request loan page
 module.exports.renderRequestLoan = async (req, res) => {
     try {
         const accounts = await Account.find({ holder: req.user._id });
@@ -89,8 +86,7 @@ module.exports.renderRequestLoan = async (req, res) => {
     }
 };
 
-
-
+// Controller for rendering the transfer to a friend page
 module.exports.renderTransferFriend = async (req, res) => {
     try {
         const accounts = await Account.find({ holder: req.user._id });
@@ -101,6 +97,8 @@ module.exports.renderTransferFriend = async (req, res) => {
         res.redirect('/');
     }
 };
+
+// Controller for rendering the transfer between account page
 module.exports.renderTransferAccount = async (req, res) => {
     try {
         const accounts = await Account.find({ holder: req.user._id });
@@ -111,6 +109,8 @@ module.exports.renderTransferAccount = async (req, res) => {
         res.redirect('/');
     }
 };
+
+// Controller for rendering the pay off loan page
 module.exports.renderPayOffLoan = async (req, res) => {
     try {
         const accounts = await Account.find({ holder: req.user._id });
@@ -122,8 +122,7 @@ module.exports.renderPayOffLoan = async (req, res) => {
     }
 };
 
-
-
+// Controller for rendering the choosing to transfer page
 module.exports.transfer = async (req, res) => {
     try {
         const accounts = await Account.find({ holder: req.user._id });
@@ -135,6 +134,7 @@ module.exports.transfer = async (req, res) => {
     }
 }
 
+// Controller for sending messages
 module.exports.sendMessage = async (req, res) => {
     try {
         const { email, name, message } = req.body;
@@ -158,15 +158,14 @@ module.exports.sendMessage = async (req, res) => {
     }
 }
 
+// Utility function for capitalizing the first letter of a string
 function capitalizeFirstLetter(string) {
     return string.toLowerCase().replace(/\b(\w)/g, function (s) {
         return s.toUpperCase();
     });
 }
 
-
-
-
+// Controller for displaying user requests
 module.exports.renderUserRequests = async (req, res) => {
     try {
         const userId = req.user._id;
@@ -194,7 +193,7 @@ module.exports.renderUserRequests = async (req, res) => {
     }
 }
 
-
+// Controller for processing a transfer
 module.exports.processTransfer = async (req, res) => {
     try {
         const fromAccountId = req.body.transferFromAccount;
@@ -278,9 +277,7 @@ module.exports.processTransfer = async (req, res) => {
     }
 };
 
-
-
-
+// Controller for processing a transfer within the same user's accounts
 module.exports.processTransferWithin = async (req, res) => {
     try {
         const fromAccountId = req.body.transferFromAccount;
@@ -346,7 +343,7 @@ module.exports.processTransferWithin = async (req, res) => {
     }
 };
 
-
+// Controller for making a payment to pay off a balance
 module.exports.payOffBalance = async (req, res) => {
     try {
         const fromAccountId = req.body.transferFromAccount;
@@ -415,9 +412,7 @@ module.exports.payOffBalance = async (req, res) => {
     }
 };
 
-
-
-
+// Controller for rendering the form to create a new account
 module.exports.renderNewForm = async (req, res) => {
     try {
         const userId = req.user._id;
@@ -430,7 +425,7 @@ module.exports.renderNewForm = async (req, res) => {
     }
 }
 
-
+// Controller for showing account details
 module.exports.showAccount = async (req, res, next) => {
     try {
 
@@ -457,6 +452,7 @@ module.exports.showAccount = async (req, res, next) => {
     }
 }
 
+// Utility function for calculating minimum payment
 function calculateMinimumPayment(balance, interestRate) {
     const rate = interestRate;
     let minimumPayment = balance * rate;
@@ -469,9 +465,7 @@ function calculateMinimumPayment(balance, interestRate) {
     return minimumPayment;
 }
 
-
-
-
+// Controller for rendering the account edit form
 module.exports.renderEditForm = async (req, res) => {
     try {
         const { id } = req.params;
@@ -493,9 +487,7 @@ module.exports.renderEditForm = async (req, res) => {
     }
 }
 
-
-
-
+// Controller for updating an account with a deposit
 module.exports.updateAccountWithDeposit = async (req, res) => {
     try {
         const { id } = req.params;
@@ -517,7 +509,7 @@ module.exports.updateAccountWithDeposit = async (req, res) => {
     }
 };
 
-
+//Controller for an admin to freeze an account
 module.exports.freezeAccount = async (req, res) => {
     try {
         const { id } = req.params;
@@ -536,7 +528,7 @@ module.exports.freezeAccount = async (req, res) => {
     }
 };
 
-
+//Controller for an admin to unfreeze an account
 module.exports.unfreezeAccount = async (req, res) => {
     try {
         const { id } = req.params;
@@ -555,7 +547,7 @@ module.exports.unfreezeAccount = async (req, res) => {
     }
 };
 
-
+//Controller for a user to lock an account
 module.exports.lockAccount = async (req, res) => {
     try {
         const { id } = req.params;
@@ -574,7 +566,7 @@ module.exports.lockAccount = async (req, res) => {
     }
 };
 
-
+//Controller for a user to unlock an account
 module.exports.unlockAccount = async (req, res) => {
     try {
         const { id } = req.params;
@@ -593,10 +585,7 @@ module.exports.unlockAccount = async (req, res) => {
     }
 };
 
-
-
-
-
+//Controller for a user to delete an account
 module.exports.deleteAccount = async (req, res) => {
     try {
         const { id } = req.params;
@@ -622,7 +611,7 @@ module.exports.deleteAccount = async (req, res) => {
 
 
 
-
+//Controller to get a next month for due dates for loans
 function getNextMonthFirstDay(currentDueDate) {
     let dueDate = new Date(currentDueDate);
     dueDate.setMonth(dueDate.getMonth() + 1);
@@ -630,15 +619,14 @@ function getNextMonthFirstDay(currentDueDate) {
     return dueDate;
 }
 
-
-
+//Generates a random ID for each account
 function generateRandomId() {
     const min = Math.pow(10, 11);
     const max = Math.pow(10, 12) - 1;
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-
+//Ensures that each ID is unique or else it re-rolls
 async function generateUniqueId() {
     let uniqueId;
     let userExists = true;

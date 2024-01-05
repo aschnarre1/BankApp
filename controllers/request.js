@@ -1,10 +1,11 @@
+// Import necessary modules and models
 const User = require("../models/user")
 const { Account } = require('../models/accounts');
 const UserRequest = require("../models/userRequest");
 const { v4: uuidv4 } = require('uuid');
 
 
-
+//Controller for creating a request
 module.exports.createRequest = async (req, res) => {
     try {
         const { deposit, accountFrom: accountId } = req.body.account;
@@ -53,8 +54,7 @@ module.exports.createRequest = async (req, res) => {
     }
 };
 
-
-
+//Controller for an admin when they approve a users request
 module.exports.approveRequest = async (req, res) => {
     try {
         const { requestId } = req.params;
@@ -95,6 +95,7 @@ module.exports.approveRequest = async (req, res) => {
     }
 };
 
+//Controller for an admin to deny a users request
 module.exports.denyRequest = async (req, res) => {
     try {
         const { requestId } = req.params;
@@ -116,8 +117,7 @@ module.exports.denyRequest = async (req, res) => {
     }
 };
 
-
-
+//Controller for a user when they request a credit card
 module.exports.creditCardRequests = async (req, res) => {
     try {
         const { accountFrom: accountId, account: { cardType: creditCardType, employmentStatus, grossIncome } } = req.body;
@@ -155,9 +155,7 @@ module.exports.creditCardRequests = async (req, res) => {
     }
 }
 
-
-
-
+//Controller for a user when they request a loan
 module.exports.loanRequests = async (req, res) => {
     try {
         const { accountFrom: accountId, account: { loanAmount, loanType, loanTerm, minimumMonthly } } = req.body;
@@ -197,12 +195,7 @@ module.exports.loanRequests = async (req, res) => {
     }
 }
 
-
-
-
-
-
-
+//Controller for an admin when they approve a users card request
 module.exports.cardApproved = async (req, res) => {
     try {
         const uniqueId = await generateUniqueId();
@@ -253,10 +246,7 @@ module.exports.cardApproved = async (req, res) => {
     }
 }
 
-
-
-
-
+//Controller when an admin approves a loan request from a user
 module.exports.loanApproved = async (req, res) => {
     try {
         const uniqueId = await generateUniqueId();
@@ -323,9 +313,7 @@ module.exports.loanApproved = async (req, res) => {
     }
 };
 
-
-
-
+//Controller for when a certain request is to get deleted by an admin
 module.exports.deleteRequest = async (req, res) => {
     try {
         const { id } = req.params;
@@ -338,24 +326,21 @@ module.exports.deleteRequest = async (req, res) => {
     }
 };
 
-
-
+//Controller to get a next month for due dates for loans
 function calculateNextPaymentDate() {
     let today = new Date();
     let nextPaymentDate = new Date(today.getFullYear(), today.getMonth() + 1, 1); // Sets the date to the 1st of next month
     return nextPaymentDate;
 }
 
-
-
-
+//Generates a random ID for each account
 function generateRandomId() {
     const min = Math.pow(10, 11);
     const max = Math.pow(10, 12) - 1;
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-
+//Ensures that each ID is unique or else it re-rolls
 async function generateUniqueId() {
     let uniqueId;
     let userExists = true;

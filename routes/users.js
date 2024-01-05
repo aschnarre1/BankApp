@@ -1,3 +1,4 @@
+// Import necessary modules and middleware
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
@@ -6,11 +7,12 @@ const User = require('../models/user');
 const users = require('../controllers/users');
 const { isLoggedIn, isAdmin, validateUser, isUser } = require('../middleware');
 
-
+//Sets up cloudinary to allow the storage of images
 const multer = require('multer');
 const { storage } = require('../cloudinary');
 const upload = multer({ storage });
 
+//Defines the routes for all user related forms and actions
 router.route('/register')
     .get(users.renderRegister)
     .post(upload.single('validId'), validateUser, catchAsync(users.register));

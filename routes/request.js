@@ -1,3 +1,4 @@
+// Import necessary modules and middleware
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const { isLoggedIn, isRequestOwner, isAdmin } = require('../middleware');
@@ -8,11 +9,13 @@ const requests = require("../controllers/request")
 const ExpressError = require('../utils/ExpressError');
 const catchAsync = require('../utils/catchAsync');
 
+//Sets up cloudinary to allow the storage of images
 const multer = require('multer');
 const { storage } = require('../cloudinary');
 const upload = multer({ storage });
 
 
+//Defines the routes for all request related forms and actions
 
 router.post('/', isLoggedIn, upload.fields([{ name: 'frontImage' }, { name: 'backImage' }]), catchAsync(requests.createRequest));
 

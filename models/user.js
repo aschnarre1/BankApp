@@ -1,8 +1,10 @@
+//Import necessary modules
 const { number } = require('joi');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
 
+// Define the schema for the User model
 const UserSchema = new Schema({
     firstName: {
         type: String,
@@ -66,7 +68,8 @@ const UserSchema = new Schema({
 
 
 
-
+// Apply the passportLocalMongoose plugin to UserSchema
 UserSchema.plugin(passportLocalMongoose);
 
+//Export the user model
 module.exports = mongoose.model('User', UserSchema);

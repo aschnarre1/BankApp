@@ -1,3 +1,4 @@
+// Import necessary modules and middleware
 const express = require('express');
 const router = express.Router();
 const accounts = require('../controllers/accountRoute');
@@ -8,6 +9,7 @@ const { isLoggedIn, isHolder, validateAccount, isAdmin, validateMessage } = requ
 const ExpressError = require('../utils/ExpressError');
 const Account = require('../models/accounts');
 
+//Defines the routes for all account related forms and actions
 
 router.route("/")
     .get(catchAsync(accounts.index))
