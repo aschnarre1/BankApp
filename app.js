@@ -74,7 +74,7 @@ const store = MongoStore.create({
     mongoUrl: dbUrl,
     touchAfter: 24 * 60 * 60,
     crypto: {
-        secret: secret
+        secret: 'squirrel'
     }
 });
 
@@ -93,7 +93,7 @@ const sessionConfig = {
     rolling: true,
     cookie: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        // secure: true,
         expires: Date.now() + 1000 * 60 * 15,
         maxAge: 1000 * 60 * 15
     }
