@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
 
-// Define the schema for the User model
+// Define the schema for the User models
 const UserSchema = new Schema({
     firstName: {
         type: String,
